@@ -78,13 +78,17 @@
     .app-shell {
       max-width: 1440px;
       margin: 0 auto;
-      padding: 0 14px 120px;
+      padding: 240px 14px 120px;
     }
 
     .hero {
-      position: sticky;
+      position: fixed;
       top: 0;
-      z-index: 30;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 28px);
+      max-width: 1412px;
+      z-index: 100;
       background: var(--top-grad);
       border-radius: 30px;
       padding: 20px;
@@ -511,8 +515,12 @@
     }
 
     @media (max-width: 760px) {
-      .app-shell { padding: 0 10px 110px; }
-      .hero { border-radius: 24px; top: 0; }
+      .app-shell { padding: 260px 10px 110px; }
+      .hero {
+        border-radius: 24px;
+        top: 0;
+        width: calc(100% - 20px);
+      }
       .toolbar, .form-grid, .form-grid-3, .kpi-grid, .quick-stats { grid-template-columns: 1fr; }
       .floating-bar { width: calc(100% - 10px); border-radius: 22px; }
       .tab-btn { font-size: 12px; }
