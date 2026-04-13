@@ -78,17 +78,17 @@
     .app-shell {
       max-width: 1440px;
       margin: 0 auto;
-      padding: 240px 14px 120px;
+      padding: 84px 14px 120px;
     }
 
     .hero {
-      position: fixed;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: calc(100% - 28px);
-      max-width: 1412px;
-      z-index: 100;
+      position: relative;
+      top: auto;
+      left: auto;
+      transform: none;
+      width: 100%;
+      max-width: none;
+      z-index: 30;
       background: var(--top-grad);
       border-radius: 30px;
       padding: 20px;
@@ -508,6 +508,53 @@
       font-size: 12px;
     }
 
+    
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 120;
+      padding: 10px 12px;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      background: rgba(10, 18, 32, 0.78);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 8px 30px rgba(2, 8, 23, 0.22);
+    }
+
+    body:not(.dark) .topbar {
+      background: rgba(255,255,255,0.78);
+      border-bottom: 1px solid rgba(15,23,42,0.08);
+    }
+
+    .topbar-inner {
+      max-width: 1440px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .topbar-title {
+      font-size: clamp(18px, 2.2vw, 24px);
+      font-weight: 900;
+      letter-spacing: .6px;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .topbar-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+
     @media (max-width: 1100px) {
       .grid { grid-template-columns: 1fr; }
       .toolbar { grid-template-columns: repeat(2, 1fr); }
@@ -515,11 +562,11 @@
     }
 
     @media (max-width: 760px) {
-      .app-shell { padding: 260px 10px 110px; }
+      .app-shell { padding: 78px 10px 110px; }
       .hero {
         border-radius: 24px;
-        top: 0;
-        width: calc(100% - 20px);
+        top: auto;
+        width: 100%;
       }
       .toolbar, .form-grid, .form-grid-3, .kpi-grid, .quick-stats { grid-template-columns: 1fr; }
       .floating-bar { width: calc(100% - 10px); border-radius: 22px; }
@@ -528,6 +575,17 @@
   </style>
 </head>
 <body>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="topbar-title" id="appTitleTop">MAKAUT GUSET HOUSE</div>
+      <div class="topbar-actions">
+        <button class="btn secondary small" id="themeToggleTop">🌙 Dark</button>
+        <button class="btn secondary small" id="langToggleTop">বাংলা</button>
+      </div>
+    </div>
+  </header>
+
   <div class="app-shell">
     <header class="hero">
       <div class="hero-top">
@@ -535,14 +593,7 @@
           <h1 id="appTitle">MAKAUT GUSET HOUSE</h1>
           <p id="heroSubtitle">Guest and school teacher in/out record system with local backup, export, edit and import options.</p>
         </div>
-        <div class="hero-actions">
-          <button class="btn secondary" id="themeToggle">🌙 Dark</button>
-          <button class="btn secondary" id="langToggle">বাংলা</button>
-          <button class="btn secondary" id="backupBtn">💾 Backup</button>
-          <button class="btn secondary" id="restoreBtn">♻ Restore</button>
-          <input type="file" id="restoreFileInput" accept=".json" class="hidden" />
         </div>
-      </div>
       <div class="quick-stats">
         <div class="stat"><b id="statTotal">0</b><span id="statTotalLabel">Total Records</span></div>
         <div class="stat"><b id="statInside">0</b><span id="statInsideLabel">Currently Inside</span></div>
@@ -1088,9 +1139,13 @@
     function applyLanguage() {
       const t = getLang();
       document.getElementById('appTitle').textContent = t.appTitle;
+      const appTitleTop = document.getElementById('appTitleTop');
+      if (appTitleTop) appTitleTop.textContent = t.appTitle;
       heroSubtitle.textContent = t.heroSubtitle;
       themeToggle.textContent = document.body.classList.contains('dark') ? t.light : t.dark;
       langToggle.textContent = t.langBtn;
+      if (themeToggleTop) themeToggleTop.textContent = document.body.classList.contains('dark') ? t.light : t.dark;
+      if (langToggleTop) langToggleTop.textContent = t.langBtn;
       statTotalLabel.textContent = t.totalRecords;
       statInsideLabel.textContent = t.currentlyInside;
       statTeachersLabel.textContent = t.teachers;
@@ -1650,6 +1705,8 @@
     const clearTeacherBtn = document.getElementById('clearTeacherBtn');
     const themeToggle = document.getElementById('themeToggle');
     const langToggle = document.getElementById('langToggle');
+    const themeToggleTop = document.getElementById('themeToggleTop');
+    const langToggleTop = document.getElementById('langToggleTop');
     const importBtn = document.getElementById('importBtn');
     const importFile = document.getElementById('importFile');
     const searchInput = document.getElementById('searchInput');
@@ -1691,18 +1748,23 @@
       restoreFileInput.value = '';
     });
 
-    themeToggle.addEventListener('click', () => {
+    function toggleThemeAction() {
       settings.theme = settings.theme === 'dark' ? 'light' : 'dark';
       saveSettings(settings);
       applyTheme();
-    });
+    }
 
-    langToggle.addEventListener('click', () => {
+    function toggleLangAction() {
       settings.lang = settings.lang === 'en' ? 'bn' : 'en';
       saveSettings(settings);
       applyLanguage();
       renderTable();
-    });
+    }
+
+    themeToggle.addEventListener('click', toggleThemeAction);
+    langToggle.addEventListener('click', toggleLangAction);
+    if (themeToggleTop) themeToggleTop.addEventListener('click', toggleThemeAction);
+    if (langToggleTop) langToggleTop.addEventListener('click', toggleLangAction);
 
     document.querySelectorAll('.tab-btn[data-tab]').forEach(btn => btn.addEventListener('click', () => switchTab(btn.dataset.tab)));
 
