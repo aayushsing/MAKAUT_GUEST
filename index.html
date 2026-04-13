@@ -78,7 +78,7 @@
     .app-shell {
       max-width: 1440px;
       margin: 0 auto;
-      padding: 84px 14px 120px;
+      padding: 96px 14px 120px;
     }
 
     .hero {
@@ -417,78 +417,8 @@
       background: rgba(255,255,255,.2);
     }
 
-    .floating-bar {
-      position: fixed;
-      left: 50%;
-      bottom: max(12px, env(safe-area-inset-bottom));
-      transform: translateX(-50%);
-      width: min(98%, 900px);
-      z-index: 60;
-      background: rgba(10, 18, 32, 0.88);
-      color: white;
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 26px;
-      box-shadow: 0 18px 50px rgba(2, 8, 23, 0.36);
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      padding: 8px;
-      gap: 8px;
-      min-height: var(--tabbar-h);
-    }
-
-    .tab-btn {
-      border: 0;
-      border-radius: 18px;
-      background: transparent;
-      color: rgba(255,255,255,.84);
-      font-weight: 800;
-      padding: 10px 8px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      gap: 4px;
-      min-height: 60px;
-      transition: .22s ease;
-    }
-
-    .tab-btn.active {
-      background: linear-gradient(135deg, rgba(37,99,235,.95), rgba(124,58,237,.95));
-      color: white;
-      box-shadow: 0 8px 22px rgba(59,130,246,.32);
-    }
-
-    .tab-btn span:first-child {
-      font-size: 18px;
-    }
-
-    .muted-box {
-      border: 1px dashed var(--line);
-      padding: 12px;
-      border-radius: 16px;
-      color: var(--muted);
-      background: rgba(255,255,255,.14);
-      font-size: 13px;
-    }
-
-    .notice {
-      padding: 12px 14px;
-      border-radius: 16px;
-      background: rgba(37,99,235,.12);
-      border: 1px solid rgba(37,99,235,.18);
-      color: var(--text);
-      font-size: 13px;
-      margin-top: 12px;
-    }
-
-    .chip-row {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
+    
+    
 
     .chip {
       padding: 8px 12px;
@@ -562,11 +492,27 @@
     }
 
     @media (max-width: 760px) {
-      .app-shell { padding: 78px 10px 110px; }
+      .app-shell { padding: 88px 10px 110px; }
       .hero {
         border-radius: 24px;
-        top: auto;
         width: 100%;
+        padding: 20px 16px 16px;
+      }
+      .topbar {
+        padding: 8px 10px;
+      }
+      .topbar-logo {
+        width: 42px;
+        height: 42px;
+        border-radius: 14px;
+        font-size: 14px;
+      }
+      .topbar-subtitle {
+        display: none;
+      }
+      .topbar-btn {
+        min-width: 78px;
+        padding: 10px 10px;
       }
       .toolbar, .form-grid, .form-grid-3, .kpi-grid, .quick-stats { grid-template-columns: 1fr; }
       .floating-bar { width: calc(100% - 10px); border-radius: 22px; }
@@ -576,24 +522,34 @@
 </head>
 <body>
 
+  
   <header class="topbar">
     <div class="topbar-inner">
-      <div class="topbar-title" id="appTitleTop">MAKAUT GUSET HOUSE</div>
+      <div class="topbar-brand">
+        <div class="topbar-logo">MG</div>
+        <div class="topbar-brand-text">
+          <div class="topbar-title" id="appTitleTop">MAKAUT GUSET HOUSE</div>
+          <div class="topbar-subtitle" id="appSubtitleTop">Digital guest and teacher record app</div>
+        </div>
+      </div>
       <div class="topbar-actions">
-        <button class="btn secondary small" id="themeToggleTop">🌙 Dark</button>
-        <button class="btn secondary small" id="langToggleTop">বাংলা</button>
+        <button class="btn secondary small topbar-btn" id="themeToggleTop">🌙 Dark</button>
+        <button class="btn secondary small topbar-btn" id="langToggleTop">বাংলা</button>
       </div>
     </div>
   </header>
 
+
   <div class="app-shell">
+    
     <header class="hero">
       <div class="hero-top">
         <div class="title-wrap">
+          <div class="hero-chip">Smart Register</div>
           <h1 id="appTitle">MAKAUT GUSET HOUSE</h1>
           <p id="heroSubtitle">Guest and school teacher in/out record system with local backup, export, edit and import options.</p>
         </div>
-        </div>
+      </div>
       <div class="quick-stats">
         <div class="stat"><b id="statTotal">0</b><span id="statTotalLabel">Total Records</span></div>
         <div class="stat"><b id="statInside">0</b><span id="statInsideLabel">Currently Inside</span></div>
@@ -601,6 +557,7 @@
         <div class="stat"><b id="statGuests">0</b><span id="statGuestsLabel">Guests</span></div>
       </div>
     </header>
+
 
     <section id="dashboardSection" class="section active">
       <div class="grid">
@@ -853,11 +810,11 @@
   </div>
 
   <nav class="floating-bar" aria-label="Bottom navigation">
-    <button class="tab-btn active" data-tab="dashboardSection"><span>🏠</span><span id="tabGuest">Guest</span></button>
-    <button class="tab-btn" data-tab="teacherSection"><span>🏫</span><span id="tabTeacher">Teacher</span></button>
-    <button class="tab-btn" data-tab="recordsSection"><span>📋</span><span id="tabRecords">Records</span></button>
-    <button class="tab-btn" data-tab="exportSection"><span>📤</span><span id="tabExport">Export</span></button>
-    <button class="tab-btn" id="quickInsideBtn"><span>🟢</span><span id="tabInside">Inside</span></button>
+    <button type="button" class="tab-btn active" data-tab="dashboardSection"><span>🏠</span><span id="tabGuest">Home</span></button>
+    <button type="button" class="tab-btn" data-tab="teacherSection"><span>🏫</span><span id="tabTeacher">Teacher</span></button>
+    <button type="button" class="tab-btn" data-tab="recordsSection"><span>📋</span><span id="tabRecords">Records</span></button>
+    <button type="button" class="tab-btn" data-tab="exportSection"><span>📤</span><span id="tabExport">Export</span></button>
+    <button type="button" class="tab-btn" id="quickInsideBtn"><span>🟢</span><span id="tabInside">Inside</span></button>
   </nav>
 
   <script>
@@ -1140,10 +1097,10 @@
       const t = getLang();
       document.getElementById('appTitle').textContent = t.appTitle;
       const appTitleTop = document.getElementById('appTitleTop');
+      const appSubtitleTop = document.getElementById('appSubtitleTop');
       if (appTitleTop) appTitleTop.textContent = t.appTitle;
+      if (appSubtitleTop) appSubtitleTop.textContent = settings.lang === 'bn' ? 'ডিজিটাল অতিথি ও শিক্ষক রেকর্ড অ্যাপ' : 'Digital guest and teacher record app';
       heroSubtitle.textContent = t.heroSubtitle;
-      themeToggle.textContent = document.body.classList.contains('dark') ? t.light : t.dark;
-      langToggle.textContent = t.langBtn;
       if (themeToggleTop) themeToggleTop.textContent = document.body.classList.contains('dark') ? t.light : t.dark;
       if (langToggleTop) langToggleTop.textContent = t.langBtn;
       statTotalLabel.textContent = t.totalRecords;
@@ -1490,8 +1447,12 @@
 
     function switchTab(tabId) {
       document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-      document.getElementById(tabId).classList.add('active');
-      document.querySelectorAll('.tab-btn[data-tab]').forEach(btn => btn.classList.toggle('active', btn.dataset.tab === tabId));
+      const target = document.getElementById(tabId);
+      if (target) target.classList.add('active');
+      document.querySelectorAll('.tab-btn[data-tab]').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.tab === tabId);
+      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function getExportRange() {
@@ -1703,8 +1664,6 @@
     const clearGuestBtn = document.getElementById('clearGuestBtn');
     const saveTeacherBtn = document.getElementById('saveTeacherBtn');
     const clearTeacherBtn = document.getElementById('clearTeacherBtn');
-    const themeToggle = document.getElementById('themeToggle');
-    const langToggle = document.getElementById('langToggle');
     const themeToggleTop = document.getElementById('themeToggleTop');
     const langToggleTop = document.getElementById('langToggleTop');
     const importBtn = document.getElementById('importBtn');
@@ -1761,8 +1720,6 @@
       renderTable();
     }
 
-    themeToggle.addEventListener('click', toggleThemeAction);
-    langToggle.addEventListener('click', toggleLangAction);
     if (themeToggleTop) themeToggleTop.addEventListener('click', toggleThemeAction);
     if (langToggleTop) langToggleTop.addEventListener('click', toggleLangAction);
 
@@ -1772,6 +1729,9 @@
       switchTab('recordsSection');
       filterStatus.value = 'IN';
       renderTable();
+      document.querySelectorAll('.tab-btn[data-tab]').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.tab === 'recordsSection');
+      });
       showToast(getLang().searchInside);
     });
 
