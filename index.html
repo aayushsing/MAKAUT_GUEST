@@ -185,6 +185,283 @@
       gap: 10px;
     }
 
+    /* ===== Slim hero title strip ===== */
+    .hero-slim {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 18px;
+      border-radius: 22px;
+      background: var(--top-grad);
+      color: white;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255,255,255,0.14);
+      overflow: hidden;
+    }
+
+    .hero-slim::before {
+      content: "";
+      position: absolute;
+      right: -50px;
+      top: -50px;
+      width: 160px;
+      height: 160px;
+      background: rgba(255,255,255,0.18);
+      border-radius: 999px;
+      filter: blur(6px);
+      pointer-events: none;
+    }
+
+    .hero-slim h1 {
+      margin: 0;
+      font-size: clamp(18px, 2.4vw, 26px);
+      font-weight: 900;
+      letter-spacing: .6px;
+      text-shadow: 0 3px 10px rgba(0,0,0,0.15);
+    }
+
+    .hero-slim p {
+      margin: 4px 0 0;
+      font-size: 12.5px;
+      color: rgba(255,255,255,0.88);
+    }
+
+    .hero-slim .title-text { position: relative; z-index: 1; flex: 1; min-width: 0; }
+
+    /* ===== Two 3D panels side by side ===== */
+    .panel-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 16px;
+      perspective: 1400px;
+    }
+
+    .panel-3d {
+      position: relative;
+      padding: 20px;
+      border-radius: 26px;
+      transform: rotateX(3deg) rotateY(-1.5deg);
+      transform-style: preserve-3d;
+      transition: transform 0.45s cubic-bezier(.2,.8,.2,1),
+                  box-shadow 0.45s cubic-bezier(.2,.8,.2,1);
+      will-change: transform;
+      overflow: hidden;
+    }
+
+    .panel-3d::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(160deg, rgba(255,255,255,0.35), rgba(255,255,255,0) 40%);
+      pointer-events: none;
+      mix-blend-mode: overlay;
+    }
+
+    .panel-3d:hover {
+      transform: rotateX(0deg) rotateY(0deg) translateY(-6px);
+    }
+
+    .panel-3d.stats-panel {
+      background: linear-gradient(135deg, #2563eb 0%, #7c3aed 55%, #0ea5e9 110%);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.22);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.25),
+        inset 0 -1px 0 rgba(0,0,0,0.08),
+        0 10px 20px -6px rgba(37,99,235,0.4),
+        0 28px 45px -10px rgba(124,58,237,0.35),
+        0 48px 70px -20px rgba(14,165,233,0.28);
+    }
+
+    .panel-3d.stats-panel:hover {
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.3),
+        inset 0 -1px 0 rgba(0,0,0,0.1),
+        0 16px 28px -6px rgba(37,99,235,0.55),
+        0 36px 55px -10px rgba(124,58,237,0.45),
+        0 64px 90px -20px rgba(14,165,233,0.35);
+    }
+
+    .panel-3d.settings-panel {
+      background: linear-gradient(145deg, rgba(255,255,255,0.95), rgba(255,255,255,0.72));
+      color: var(--text);
+      border: 1px solid var(--line);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.9),
+        inset 0 -1px 0 rgba(0,0,0,0.04),
+        0 10px 20px -6px rgba(15,23,42,0.12),
+        0 28px 45px -10px rgba(15,23,42,0.1),
+        0 48px 70px -20px rgba(15,23,42,0.08);
+    }
+
+    body.dark .panel-3d.settings-panel {
+      background: linear-gradient(145deg, rgba(30,41,59,0.9), rgba(15,23,42,0.7));
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.08),
+        inset 0 -1px 0 rgba(0,0,0,0.3),
+        0 10px 20px -6px rgba(2,8,23,0.5),
+        0 28px 45px -10px rgba(2,8,23,0.45),
+        0 48px 70px -20px rgba(2,8,23,0.35);
+    }
+
+    .panel-3d.settings-panel:hover {
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.9),
+        inset 0 -1px 0 rgba(0,0,0,0.04),
+        0 16px 28px -6px rgba(15,23,42,0.18),
+        0 36px 55px -10px rgba(15,23,42,0.14),
+        0 64px 90px -20px rgba(15,23,42,0.12);
+    }
+
+    body.dark .panel-3d.settings-panel:hover {
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.1),
+        inset 0 -1px 0 rgba(0,0,0,0.3),
+        0 16px 28px -6px rgba(2,8,23,0.6),
+        0 36px 55px -10px rgba(2,8,23,0.55),
+        0 64px 90px -20px rgba(2,8,23,0.45);
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .panel-header h3 {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: .4px;
+      text-transform: uppercase;
+      opacity: 0.92;
+    }
+
+    .panel-badge {
+      width: 38px;
+      height: 38px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.22);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.3);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.3);
+    }
+
+    body.dark .panel-3d.settings-panel .panel-badge {
+      background: rgba(96,165,250,0.18);
+      border-color: rgba(96,165,250,0.3);
+    }
+
+    .panel-3d.settings-panel .panel-badge {
+      background: linear-gradient(135deg, rgba(37,99,235,0.15), rgba(124,58,237,0.15));
+      border-color: rgba(37,99,235,0.22);
+    }
+
+    /* Stats inside stats panel */
+    .stat-grid-2x2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .stat-item {
+      padding: 14px 12px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.14);
+      border: 1px solid rgba(255,255,255,0.22);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.28),
+        0 6px 14px rgba(0,0,0,0.08);
+      backdrop-filter: blur(10px);
+      transition: transform .25s ease, box-shadow .25s ease;
+      text-align: center;
+    }
+
+    .stat-item:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.35),
+        0 12px 22px rgba(0,0,0,0.14);
+    }
+
+    .stat-num-big {
+      font-size: clamp(24px, 3.2vw, 32px);
+      font-weight: 900;
+      letter-spacing: .4px;
+      line-height: 1;
+      margin-bottom: 4px;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.18);
+    }
+
+    .stat-label-sm {
+      font-size: 11px;
+      opacity: 0.92;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      font-weight: 700;
+    }
+
+    /* Settings buttons inside settings panel */
+    .settings-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .settings-btn {
+      padding: 14px 12px;
+      border-radius: 16px;
+      font-weight: 800;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      border: 1px solid var(--line);
+      background: linear-gradient(145deg, rgba(255,255,255,0.96), rgba(255,255,255,0.72));
+      color: var(--text);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.9),
+        0 6px 14px rgba(15,23,42,0.08);
+      cursor: pointer;
+      transition: transform .22s ease, box-shadow .22s ease, background .22s ease;
+    }
+
+    body.dark .settings-btn {
+      background: linear-gradient(145deg, rgba(51,65,85,0.8), rgba(30,41,59,0.75));
+      color: var(--text);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.08),
+        0 6px 14px rgba(2,8,23,0.4);
+    }
+
+    .settings-btn:hover {
+      transform: translateY(-2px);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.9),
+        0 12px 20px rgba(37,99,235,0.22);
+    }
+
+    body.dark .settings-btn:hover {
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.1),
+        0 12px 20px rgba(2,8,23,0.6);
+    }
+
     .grid {
       display: grid;
       grid-template-columns: 1.1fr .9fr;
@@ -558,6 +835,8 @@
       .grid { grid-template-columns: 1fr; }
       .toolbar { grid-template-columns: repeat(2, 1fr); }
       .quick-stats, .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      .panel-grid { grid-template-columns: 1fr; }
+      .panel-3d { transform: rotateX(2deg); }
     }
 
     @media (max-width: 760px) {
@@ -567,35 +846,64 @@
       .floating-bar { width: calc(100% - 10px); border-radius: 22px; }
       .tab-btn { font-size: 12px; }
       .brand-logo { width: 48px; height: 48px; font-size: 26px; border-radius: 14px; }
+      .panel-3d { transform: none; padding: 16px; border-radius: 22px; }
+      .panel-3d:hover { transform: translateY(-3px); }
+      .stat-num-big { font-size: 22px; }
     }
   </style>
 </head>
 <body>
   <div class="app-shell">
-    <header class="hero">
-      <div class="hero-top">
-        <div class="title-wrap">
-          <div class="brand-logo" aria-hidden="true">M</div>
-          <div>
-            <h1 id="appTitle">MAKAUT GUSET HOUSE</h1>
-            <p id="heroSubtitle">Guest and school teacher in/out record system with local backup, export, edit and import options.</p>
-          </div>
-        </div>
-        <div class="hero-actions">
-          <button class="btn secondary" id="themeToggle">🌙 Dark</button>
-          <button class="btn secondary" id="langToggle">বাংলা</button>
-          <button class="btn secondary" id="backupBtn">💾 Backup</button>
-          <button class="btn secondary" id="restoreBtn">♻ Restore</button>
-          <input type="file" id="restoreFileInput" accept=".json" class="hidden" />
-        </div>
-      </div>
-      <div class="quick-stats">
-        <div class="stat"><b id="statTotal">0</b><span id="statTotalLabel">Total Records</span></div>
-        <div class="stat"><b id="statInside">0</b><span id="statInsideLabel">Currently Inside</span></div>
-        <div class="stat"><b id="statTeachers">0</b><span id="statTeachersLabel">Teachers</span></div>
-        <div class="stat"><b id="statGuests">0</b><span id="statGuestsLabel">Guests</span></div>
+    <header class="hero-slim">
+      <div class="brand-logo" aria-hidden="true">M</div>
+      <div class="title-text">
+        <h1 id="appTitle">MAKAUT GUSET HOUSE</h1>
+        <p id="heroSubtitle">Guest and school teacher in/out record system with local backup, export, edit and import options.</p>
       </div>
     </header>
+
+    <div class="panel-grid">
+      <!-- 3D Stats Panel -->
+      <div class="panel-3d stats-panel">
+        <div class="panel-header">
+          <h3 id="statsPanelTitle">Overview</h3>
+          <span class="panel-badge" aria-hidden="true">📊</span>
+        </div>
+        <div class="stat-grid-2x2">
+          <div class="stat-item">
+            <div class="stat-num-big" id="statTotal">0</div>
+            <div class="stat-label-sm" id="statTotalLabel">Total Records</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num-big" id="statInside">0</div>
+            <div class="stat-label-sm" id="statInsideLabel">Currently Inside</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num-big" id="statTeachers">0</div>
+            <div class="stat-label-sm" id="statTeachersLabel">Teachers</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num-big" id="statGuests">0</div>
+            <div class="stat-label-sm" id="statGuestsLabel">Guests</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3D Settings Panel -->
+      <div class="panel-3d settings-panel">
+        <div class="panel-header">
+          <h3 id="settingsPanelTitle">Settings</h3>
+          <span class="panel-badge" aria-hidden="true">⚙️</span>
+        </div>
+        <div class="settings-grid">
+          <button class="settings-btn" id="themeToggle">🌙 Dark</button>
+          <button class="settings-btn" id="langToggle">বাংলা</button>
+          <button class="settings-btn" id="backupBtn">💾 Backup</button>
+          <button class="settings-btn" id="restoreBtn">♻ Restore</button>
+        </div>
+        <input type="file" id="restoreFileInput" accept=".json" class="hidden" />
+      </div>
+    </div>
 
     <section id="dashboardSection" class="section active">
       <div class="grid">
@@ -770,6 +1078,17 @@
           <button class="btn warn" id="clearTeacherBtn">🧹 Clear Form</button>
         </div>
         <div class="notice" id="teacherNotice">Time is auto-captured if left blank. You can type any In/Out time manually, or tap "Now" to fill current time.</div>
+      </div>
+
+      <div class="card" style="margin-top:16px;">
+        <div class="card-title">
+          <h3 id="teacherImportTitle">Import Data</h3>
+        </div>
+        <div class="muted-box" id="teacherImportHint">Supported: Excel (.xlsx, .xls) and CSV. Recommended columns: type, name, place, phone, purpose, roomNumber, allottedBy, date, status, remarks, inTime, outTime.</div>
+        <div class="row" style="margin-top:12px;">
+          <input type="file" id="teacherImportFile" accept=".xlsx,.xls,.csv" />
+          <button class="btn success" id="teacherImportBtn">📥 Import File</button>
+        </div>
       </div>
     </section>
 
@@ -946,6 +1265,8 @@
       en: {
         appTitle: 'MAKAUT GUSET HOUSE',
         heroSubtitle: 'Guest and school teacher in/out record system with local backup, export, edit and import options.',
+        overviewPanel: 'Overview',
+        settingsPanel: 'Settings',
         dark: '🌙 Dark',
         light: '☀ Light',
         langBtn: 'বাংলা',
@@ -985,6 +1306,9 @@
         quickTools: 'Quick Tools',
         mobileNote: 'Works well on Android and iPhone browser. Add to Home Screen for app-like use.',
         teacherEntryTitle: 'School Teacher Entry Form',
+        teacherImportTitle: 'Import Data',
+        teacherImportHint: 'Supported: Excel (.xlsx, .xls) and CSV. Recommended columns: type, name, place, phone, purpose, roomNumber, allottedBy, date, status, remarks, inTime, outTime.',
+        teacherImportBtn: '📥 Import File',
         teacherNotice: 'Time is auto-captured if left blank. You can type any In/Out time manually, or tap "Now" to fill current time.',
         teacherName: 'Teacher Name',
         schoolName: 'School Name',
@@ -1053,6 +1377,8 @@
       bn: {
         appTitle: 'MAKAUT GUSET HOUSE',
         heroSubtitle: 'অতিথি ও স্কুল শিক্ষকের ইন/আউট রেকর্ড সিস্টেম, লোকাল ব্যাকআপ, এক্সপোর্ট, এডিট ও ইমপোর্ট সহ।',
+        overviewPanel: 'ওভারভিউ',
+        settingsPanel: 'সেটিংস',
         dark: '🌙 ডার্ক',
         light: '☀ লাইট',
         langBtn: 'English',
@@ -1092,6 +1418,9 @@
         quickTools: 'দ্রুত টুলস',
         mobileNote: 'Android ও iPhone ব্রাউজারে ভালো কাজ করবে। App-এর মতো ব্যবহারের জন্য Add to Home Screen করুন।',
         teacherEntryTitle: 'স্কুল শিক্ষক এন্ট্রি ফর্ম',
+        teacherImportTitle: 'ডেটা ইমপোর্ট',
+        teacherImportHint: 'সাপোর্টেড: Excel (.xlsx, .xls) এবং CSV। সাজেস্টেড কলাম: type, name, place, phone, purpose, roomNumber, allottedBy, date, status, remarks, inTime, outTime.',
+        teacherImportBtn: '📥 ফাইল ইমপোর্ট',
         teacherNotice: 'ফাঁকা রাখলে সময় অটো ক্যাপচার হবে। আপনি নিজে টাইপ করতে পারেন, অথবা "Now" চাপুন।',
         teacherName: 'শিক্ষকের নাম',
         schoolName: 'স্কুলের নাম',
@@ -1233,6 +1562,8 @@
       const t = getLang();
       document.getElementById('appTitle').textContent = t.appTitle;
       heroSubtitle.textContent = t.heroSubtitle;
+      document.getElementById('statsPanelTitle').textContent = t.overviewPanel;
+      document.getElementById('settingsPanelTitle').textContent = t.settingsPanel;
       themeToggle.textContent = document.body.classList.contains('dark') ? t.light : t.dark;
       langToggle.textContent = t.langBtn;
       statTotalLabel.textContent = t.totalRecords;
@@ -1275,6 +1606,9 @@
       mobileNote.textContent = t.mobileNote;
       teacherEntryTitle.textContent = t.teacherEntryTitle;
       teacherNotice.textContent = t.teacherNotice;
+      teacherImportTitle.textContent = t.teacherImportTitle;
+      teacherImportHint.textContent = t.teacherImportHint;
+      teacherImportBtn.textContent = t.teacherImportBtn;
       tLabelName.textContent = t.teacherName;
       tLabelSchool.textContent = t.schoolName;
       tLabelPlace.textContent = t.place;
@@ -1754,9 +2088,10 @@
       reader.readAsText(file);
     }
 
-    function importFileData() {
+    function importFileData(inputEl) {
       const t = getLang();
-      const file = importFile.files[0];
+      const fileEl = inputEl || importFile;
+      const file = fileEl.files[0];
       if (!file) return alert('Please choose a file first.');
       const reader = new FileReader();
       reader.onload = function(e) {
@@ -1800,7 +2135,7 @@
           records = [...mapped, ...records];
           saveRecords();
           showToast(t.imported);
-          importFile.value = '';
+          fileEl.value = '';
         } catch (err) {
           alert('Import failed. Please check file format.');
           console.error(err);
@@ -1850,6 +2185,10 @@
     const langToggle = document.getElementById('langToggle');
     const importBtn = document.getElementById('importBtn');
     const importFile = document.getElementById('importFile');
+    const teacherImportBtn = document.getElementById('teacherImportBtn');
+    const teacherImportFile = document.getElementById('teacherImportFile');
+    const teacherImportTitle = document.getElementById('teacherImportTitle');
+    const teacherImportHint = document.getElementById('teacherImportHint');
     const searchInput = document.getElementById('searchInput');
     const filterType = document.getElementById('filterType');
     const filterStatus = document.getElementById('filterStatus');
@@ -1877,7 +2216,8 @@
     clearGuestBtn.addEventListener('click', () => clearGuestForm());
     saveTeacherBtn.addEventListener('click', saveTeacher);
     clearTeacherBtn.addEventListener('click', () => clearTeacherForm());
-    importBtn.addEventListener('click', importFileData);
+    importBtn.addEventListener('click', () => importFileData(importFile));
+    teacherImportBtn.addEventListener('click', () => importFileData(teacherImportFile));
     [searchInput, filterType, filterStatus, filterFromDate, filterToDate].forEach(el => el.addEventListener('input', () => renderTable()));
     exportExcelBtn.addEventListener('click', exportExcel);
     exportPdfBtn.addEventListener('click', exportPDF);
