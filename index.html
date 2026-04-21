@@ -3,9 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="theme-color" content="#0f172a" />
+  <meta name="theme-color" content="#2563eb" />
+
+  <!-- PWA / Home Screen App Icon (M logo) -->
   <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="MAKAUT GH" />
+  <meta name="application-name" content="MAKAUT GH" />
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0%25' stop-color='%232563eb'/><stop offset='55%25' stop-color='%237c3aed'/><stop offset='100%25' stop-color='%230ea5e9'/></linearGradient></defs><rect width='512' height='512' rx='112' fill='url(%23g)'/><text x='256' y='370' font-family='Arial, sans-serif' font-size='340' font-weight='900' text-anchor='middle' fill='white'>M</text></svg>" />
+
+  <link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0%25' stop-color='%232563eb'/><stop offset='55%25' stop-color='%237c3aed'/><stop offset='100%25' stop-color='%230ea5e9'/></linearGradient></defs><rect width='512' height='512' rx='112' fill='url(%23g)'/><text x='256' y='370' font-family='Arial, sans-serif' font-size='340' font-weight='900' text-anchor='middle' fill='white'>M</text></svg>" />
+
+  <link id="manifestLink" rel="manifest" href="" />
+
   <title>MAKAUT GUSET HOUSE</title>
 
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
@@ -130,6 +142,27 @@
       flex-wrap: wrap;
       position: relative;
       z-index: 1;
+    }
+
+    .title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-logo {
+      width: 58px;
+      height: 58px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #ffffff 0%, rgba(255,255,255,0.85) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 34px;
+      color: #2563eb;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.6);
+      flex-shrink: 0;
     }
 
     .title-wrap h1 {
@@ -282,6 +315,23 @@
     textarea {
       min-height: 90px;
       resize: vertical;
+    }
+
+    .time-row {
+      display: flex;
+      gap: 6px;
+      align-items: stretch;
+    }
+
+    .time-row input {
+      flex: 1;
+    }
+
+    .time-row .btn {
+      padding: 10px 12px;
+      border-radius: 14px;
+      font-size: 12px;
+      white-space: nowrap;
     }
 
     .row {
@@ -516,6 +566,7 @@
       .toolbar, .form-grid, .form-grid-3, .kpi-grid, .quick-stats { grid-template-columns: 1fr; }
       .floating-bar { width: calc(100% - 10px); border-radius: 22px; }
       .tab-btn { font-size: 12px; }
+      .brand-logo { width: 48px; height: 48px; font-size: 26px; border-radius: 14px; }
     }
   </style>
 </head>
@@ -524,8 +575,11 @@
     <header class="hero">
       <div class="hero-top">
         <div class="title-wrap">
-          <h1 id="appTitle">MAKAUT GUSET HOUSE</h1>
-          <p id="heroSubtitle">Guest and school teacher in/out record system with local backup, export, edit and import options.</p>
+          <div class="brand-logo" aria-hidden="true">M</div>
+          <div>
+            <h1 id="appTitle">MAKAUT GUSET HOUSE</h1>
+            <p id="heroSubtitle">Guest and school teacher in/out record system with local backup, export, edit and import options.</p>
+          </div>
         </div>
         <div class="hero-actions">
           <button class="btn secondary" id="themeToggle">🌙 Dark</button>
@@ -586,6 +640,20 @@
                 <option value="OUT">OUT</option>
               </select>
             </div>
+            <div class="field">
+              <label id="labelInTime" for="guestInTime">In Time (editable)</label>
+              <div class="time-row">
+                <input id="guestInTime" placeholder="e.g. 10:30 AM or leave blank for auto" />
+                <button type="button" class="btn secondary" onclick="setNowTime('guestInTime')">Now</button>
+              </div>
+            </div>
+            <div class="field">
+              <label id="labelOutTime" for="guestOutTime">Out Time (editable)</label>
+              <div class="time-row">
+                <input id="guestOutTime" placeholder="e.g. 06:45 PM or leave blank" />
+                <button type="button" class="btn secondary" onclick="setNowTime('guestOutTime')">Now</button>
+              </div>
+            </div>
           </div>
           <div class="field" style="margin-top:12px;">
             <label id="labelRemarks" for="guestRemarks">Remarks</label>
@@ -595,7 +663,7 @@
             <button class="btn primary" id="saveGuestBtn">➕ Save Guest Entry</button>
             <button class="btn warn" id="clearGuestBtn">🧹 Clear Form</button>
           </div>
-          <div class="notice" id="guestNotice">Time is auto-captured. You can edit any wrong entry later from the records table.</div>
+          <div class="notice" id="guestNotice">Time is auto-captured if left blank. You can type any In/Out time manually, or tap "Now" to fill current time. Edit anytime from the records table.</div>
         </div>
 
         <div class="card">
@@ -678,6 +746,20 @@
             <label id="tLabelPurpose" for="teacherPurpose">Purpose</label>
             <input id="teacherPurpose" placeholder="Purpose" />
           </div>
+          <div class="field">
+            <label id="tLabelInTime" for="teacherInTime">In Time (editable)</label>
+            <div class="time-row">
+              <input id="teacherInTime" placeholder="e.g. 09:15 AM or leave blank for auto" />
+              <button type="button" class="btn secondary" onclick="setNowTime('teacherInTime')">Now</button>
+            </div>
+          </div>
+          <div class="field">
+            <label id="tLabelOutTime" for="teacherOutTime">Out Time (editable)</label>
+            <div class="time-row">
+              <input id="teacherOutTime" placeholder="e.g. 05:30 PM or leave blank" />
+              <button type="button" class="btn secondary" onclick="setNowTime('teacherOutTime')">Now</button>
+            </div>
+          </div>
         </div>
         <div class="field" style="margin-top:12px;">
           <label id="tLabelRemarks" for="teacherRemarks">Remarks</label>
@@ -687,22 +769,23 @@
           <button class="btn primary" id="saveTeacherBtn">➕ Save Teacher Entry</button>
           <button class="btn warn" id="clearTeacherBtn">🧹 Clear Form</button>
         </div>
+        <div class="notice" id="teacherNotice">Time is auto-captured if left blank. You can type any In/Out time manually, or tap "Now" to fill current time.</div>
       </div>
     </section>
 
     <section id="recordsSection" class="section">
-      
-<div class="card" style="margin-bottom:12px;">
-  <div class="card-title">
-    <h3>Quick OUT Entry</h3>
-  </div>
-  <div class="row">
-    <input id="quickOutSearch" placeholder="Search by name or room..." />
-    <button class="btn danger" onclick="quickMarkOut()">Mark OUT</button>
-  </div>
-</div>
 
-<div class="card">
+      <div class="card" style="margin-bottom:12px;">
+        <div class="card-title">
+          <h3>Quick OUT Entry</h3>
+        </div>
+        <div class="row">
+          <input id="quickOutSearch" placeholder="Search by name or room..." />
+          <button class="btn danger" onclick="quickMarkOut()">Mark OUT</button>
+        </div>
+      </div>
+
+      <div class="card">
         <div class="card-title">
           <h2 id="recordsTitle">Records</h2>
           <span class="subtext" id="recordCountText">0 records</span>
@@ -813,6 +896,48 @@
   </nav>
 
   <script>
+    /* =========================================================
+       PWA MANIFEST (inline as Blob URL - no external files)
+       ========================================================= */
+    (function installManifest() {
+      const iconSVG = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'>" +
+        "<defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'>" +
+        "<stop offset='0%' stop-color='#2563eb'/>" +
+        "<stop offset='55%' stop-color='#7c3aed'/>" +
+        "<stop offset='100%' stop-color='#0ea5e9'/>" +
+        "</linearGradient></defs>" +
+        "<rect width='512' height='512' rx='112' fill='url(#g)'/>" +
+        "<text x='256' y='370' font-family='Arial, sans-serif' font-size='340' font-weight='900' text-anchor='middle' fill='white'>M</text>" +
+        "</svg>";
+      const iconDataUri = "data:image/svg+xml;utf8," + encodeURIComponent(iconSVG);
+
+      const manifest = {
+        name: "MAKAUT Guest House",
+        short_name: "MAKAUT GH",
+        description: "Guest & teacher in/out register for MAKAUT Guest House",
+        start_url: ".",
+        scope: ".",
+        display: "standalone",
+        orientation: "portrait",
+        background_color: "#0b1728",
+        theme_color: "#2563eb",
+        icons: [
+          { src: iconDataUri, sizes: "192x192", type: "image/svg+xml", purpose: "any" },
+          { src: iconDataUri, sizes: "512x512", type: "image/svg+xml", purpose: "any" },
+          { src: iconDataUri, sizes: "512x512", type: "image/svg+xml", purpose: "maskable" }
+        ]
+      };
+      try {
+        const blob = new Blob([JSON.stringify(manifest)], { type: "application/json" });
+        document.getElementById("manifestLink").href = URL.createObjectURL(blob);
+      } catch (e) {
+        console.warn("Manifest install failed:", e);
+      }
+    })();
+
+    /* =========================================================
+       APP DATA
+       ========================================================= */
     const STORAGE_KEY = 'makaut_guest_house_records_v2';
     const SETTINGS_KEY = 'makaut_guest_house_settings_v2';
     const editState = { id: null, type: null };
@@ -848,7 +973,7 @@
         saveGuest: '➕ Save Guest Entry',
         updateGuest: '✏ Update Guest Entry',
         clearForm: '🧹 Clear Form',
-        guestNotice: 'Time is auto-captured. You can edit any wrong entry later from the records table.',
+        guestNotice: 'Time is auto-captured if left blank. You can type any In/Out time manually, or tap "Now" to fill current time. Edit anytime from the records table.',
         todaySummary: 'Today Summary',
         todayEntries: 'Today Entries',
         inMarked: 'IN Marked',
@@ -860,6 +985,7 @@
         quickTools: 'Quick Tools',
         mobileNote: 'Works well on Android and iPhone browser. Add to Home Screen for app-like use.',
         teacherEntryTitle: 'School Teacher Entry Form',
+        teacherNotice: 'Time is auto-captured if left blank. You can type any In/Out time manually, or tap "Now" to fill current time.',
         teacherName: 'Teacher Name',
         schoolName: 'School Name',
         schoolPh: 'School name',
@@ -898,6 +1024,10 @@
         action: 'Action',
         inTime: 'In Time',
         outTime: 'Out Time',
+        inTimeEditable: 'In Time (editable)',
+        outTimeEditable: 'Out Time (editable)',
+        inTimePh: 'e.g. 10:30 AM or leave blank for auto',
+        outTimePh: 'e.g. 06:45 PM or leave blank',
         saveOk: 'Entry saved successfully.',
         updateOk: 'Entry updated successfully.',
         deleted: 'Entry deleted successfully.',
@@ -950,7 +1080,7 @@
         saveGuest: '➕ অতিথি এন্ট্রি সেভ করুন',
         updateGuest: '✏ অতিথি এন্ট্রি আপডেট করুন',
         clearForm: '🧹 ফর্ম পরিষ্কার করুন',
-        guestNotice: 'সময় অটো ক্যাপচার হয়। ভুল হলে পরে রেকর্ড টেবিল থেকে এডিট করতে পারবেন।',
+        guestNotice: 'ফাঁকা রাখলে সময় অটো ক্যাপচার হবে। আপনি চাইলে ইন/আউট সময় নিজেই টাইপ করতে পারেন, অথবা "Now" চাপলে বর্তমান সময় বসবে।',
         todaySummary: 'আজকের সারাংশ',
         todayEntries: 'আজকের এন্ট্রি',
         inMarked: 'IN মার্ক',
@@ -962,6 +1092,7 @@
         quickTools: 'দ্রুত টুলস',
         mobileNote: 'Android ও iPhone ব্রাউজারে ভালো কাজ করবে। App-এর মতো ব্যবহারের জন্য Add to Home Screen করুন।',
         teacherEntryTitle: 'স্কুল শিক্ষক এন্ট্রি ফর্ম',
+        teacherNotice: 'ফাঁকা রাখলে সময় অটো ক্যাপচার হবে। আপনি নিজে টাইপ করতে পারেন, অথবা "Now" চাপুন।',
         teacherName: 'শিক্ষকের নাম',
         schoolName: 'স্কুলের নাম',
         schoolPh: 'স্কুলের নাম',
@@ -1000,6 +1131,10 @@
         action: 'অ্যাকশন',
         inTime: 'ইন টাইম',
         outTime: 'আউট টাইম',
+        inTimeEditable: 'ইন টাইম (এডিটেবল)',
+        outTimeEditable: 'আউট টাইম (এডিটেবল)',
+        inTimePh: 'যেমন 10:30 AM অথবা ফাঁকা রাখুন',
+        outTimePh: 'যেমন 06:45 PM অথবা ফাঁকা রাখুন',
         saveOk: 'এন্ট্রি সফলভাবে সেভ হয়েছে।',
         updateOk: 'এন্ট্রি সফলভাবে আপডেট হয়েছে।',
         deleted: 'এন্ট্রি সফলভাবে ডিলিট হয়েছে।',
@@ -1065,6 +1200,12 @@
       return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
     }
 
+    /* Helper used by the "Now" button next to time inputs */
+    window.setNowTime = function(fieldId) {
+      const el = document.getElementById(fieldId);
+      if (el) el.value = nowTime();
+    };
+
     function formatDateHuman(dateStr) {
       if (!dateStr) return '-';
       const d = new Date(dateStr + 'T00:00:00');
@@ -1108,6 +1249,8 @@
       labelDate.textContent = t.date;
       labelStatus.textContent = t.status;
       labelRemarks.textContent = t.remarks;
+      labelInTime.textContent = t.inTimeEditable;
+      labelOutTime.textContent = t.outTimeEditable;
       guestName.placeholder = t.fullNamePh;
       guestPlace.placeholder = t.placePh;
       guestPhone.placeholder = t.phonePh;
@@ -1115,6 +1258,8 @@
       guestRoom.placeholder = t.roomPh;
       guestAllottedBy.placeholder = t.allottedByPh;
       guestRemarks.placeholder = t.remarksPh;
+      guestInTime.placeholder = t.inTimePh;
+      guestOutTime.placeholder = t.outTimePh;
       saveGuestBtn.textContent = editState.type === 'Guest' ? t.updateGuest : t.saveGuest;
       clearGuestBtn.textContent = t.clearForm;
       guestNotice.textContent = t.guestNotice;
@@ -1129,6 +1274,7 @@
       quickToolsTitle.textContent = t.quickTools;
       mobileNote.textContent = t.mobileNote;
       teacherEntryTitle.textContent = t.teacherEntryTitle;
+      teacherNotice.textContent = t.teacherNotice;
       tLabelName.textContent = t.teacherName;
       tLabelSchool.textContent = t.schoolName;
       tLabelPlace.textContent = t.place;
@@ -1139,6 +1285,8 @@
       tLabelStatus.textContent = t.status;
       tLabelPurpose.textContent = t.purpose;
       tLabelRemarks.textContent = t.remarks;
+      tLabelInTime.textContent = t.inTimeEditable;
+      tLabelOutTime.textContent = t.outTimeEditable;
       teacherName.placeholder = t.fullNamePh;
       teacherSchool.placeholder = t.schoolPh;
       teacherPlace.placeholder = t.placePh;
@@ -1147,6 +1295,8 @@
       teacherHost.placeholder = t.hostPh;
       teacherPurpose.placeholder = t.purposePh;
       teacherRemarks.placeholder = t.remarksPh;
+      teacherInTime.placeholder = t.inTimePh;
+      teacherOutTime.placeholder = t.outTimePh;
       saveTeacherBtn.textContent = editState.type === 'Teacher' ? t.updateTeacher : t.saveTeacher;
       clearTeacherBtn.textContent = t.clearForm;
       recordsTitle.textContent = t.records;
@@ -1205,6 +1355,8 @@
       guestDate.value = todayISO();
       guestStatus.value = 'IN';
       guestRemarks.value = '';
+      guestInTime.value = '';
+      guestOutTime.value = '';
       applyLanguage();
     }
 
@@ -1222,7 +1374,33 @@
       teacherStatus.value = 'IN';
       teacherPurpose.value = '';
       teacherRemarks.value = '';
+      teacherInTime.value = '';
+      teacherOutTime.value = '';
       applyLanguage();
+    }
+
+    /* Resolve the final inTime / outTime considering manual override,
+       existing record value, and status-driven auto-capture. */
+    function resolveTimes(manualIn, manualOut, existing, status) {
+      let inTime, outTime;
+
+      if (manualIn !== '') {
+        inTime = manualIn;
+      } else if (existing && existing.inTime) {
+        inTime = existing.inTime;
+      } else {
+        inTime = status === 'IN' ? nowTime() : '';
+      }
+
+      if (manualOut !== '') {
+        outTime = manualOut;
+      } else if (existing && existing.outTime) {
+        outTime = existing.outTime;
+      } else {
+        outTime = status === 'OUT' ? nowTime() : '';
+      }
+
+      return { inTime, outTime };
     }
 
     function saveGuest() {
@@ -1230,6 +1408,10 @@
       if (!guestName.value.trim()) return showToast(t.requiredName);
       const existing = editState.id ? records.find(r => r.id === editState.id) : null;
       const status = guestStatus.value;
+      const manualIn = guestInTime.value.trim();
+      const manualOut = guestOutTime.value.trim();
+      const { inTime, outTime } = resolveTimes(manualIn, manualOut, existing, status);
+
       const item = {
         id: existing?.id || uid(),
         type: 'Guest',
@@ -1244,8 +1426,8 @@
         date: guestDate.value || todayISO(),
         status,
         remarks: guestRemarks.value.trim(),
-        inTime: existing?.inTime || (status === 'IN' ? nowTime() : ''),
-        outTime: status === 'OUT' ? (existing?.outTime || nowTime()) : '',
+        inTime,
+        outTime,
         createdAt: existing?.createdAt || new Date().toISOString(),
         updatedAt: new Date().toISOString()
       };
@@ -1266,6 +1448,10 @@
       if (!teacherName.value.trim()) return showToast(t.requiredName);
       const existing = editState.id ? records.find(r => r.id === editState.id) : null;
       const status = teacherStatus.value;
+      const manualIn = teacherInTime.value.trim();
+      const manualOut = teacherOutTime.value.trim();
+      const { inTime, outTime } = resolveTimes(manualIn, manualOut, existing, status);
+
       const item = {
         id: existing?.id || uid(),
         type: 'Teacher',
@@ -1280,8 +1466,8 @@
         date: teacherDate.value || todayISO(),
         status,
         remarks: teacherRemarks.value.trim(),
-        inTime: existing?.inTime || (status === 'IN' ? nowTime() : ''),
-        outTime: status === 'OUT' ? (existing?.outTime || nowTime()) : '',
+        inTime,
+        outTime,
         createdAt: existing?.createdAt || new Date().toISOString(),
         updatedAt: new Date().toISOString()
       };
@@ -1389,6 +1575,8 @@
         guestDate.value = r.date || todayISO();
         guestStatus.value = r.status || 'IN';
         guestRemarks.value = r.remarks || '';
+        guestInTime.value = r.inTime || '';
+        guestOutTime.value = r.outTime || '';
       } else {
         switchTab('teacherSection');
         teacherName.value = r.name || '';
@@ -1401,6 +1589,8 @@
         teacherStatus.value = r.status || 'IN';
         teacherPurpose.value = r.purpose || '';
         teacherRemarks.value = r.remarks || '';
+        teacherInTime.value = r.inTime || '';
+        teacherOutTime.value = r.outTime || '';
       }
       applyLanguage();
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1636,6 +1826,9 @@
     const guestDate = document.getElementById('guestDate');
     const guestStatus = document.getElementById('guestStatus');
     const guestRemarks = document.getElementById('guestRemarks');
+    const guestInTime = document.getElementById('guestInTime');
+    const guestOutTime = document.getElementById('guestOutTime');
+
     const teacherName = document.getElementById('teacherName');
     const teacherSchool = document.getElementById('teacherSchool');
     const teacherPlace = document.getElementById('teacherPlace');
@@ -1646,6 +1839,8 @@
     const teacherStatus = document.getElementById('teacherStatus');
     const teacherPurpose = document.getElementById('teacherPurpose');
     const teacherRemarks = document.getElementById('teacherRemarks');
+    const teacherInTime = document.getElementById('teacherInTime');
+    const teacherOutTime = document.getElementById('teacherOutTime');
 
     const saveGuestBtn = document.getElementById('saveGuestBtn');
     const clearGuestBtn = document.getElementById('clearGuestBtn');
@@ -1722,29 +1917,28 @@
       customToWrap.classList.toggle('hidden', !custom);
     });
 
-    
-function quickMarkOut() {
-  const query = document.getElementById('quickOutSearch').value.toLowerCase();
-  if (!query) return alert('Enter name or room');
+    function quickMarkOut() {
+      const query = document.getElementById('quickOutSearch').value.toLowerCase();
+      if (!query) return alert('Enter name or room');
 
-  const found = records.find(r => 
-    r.status === 'IN' && (
-      (r.name && r.name.toLowerCase().includes(query)) ||
-      (r.roomNumber && r.roomNumber.toLowerCase().includes(query))
-    )
-  );
+      const found = records.find(r =>
+        r.status === 'IN' && (
+          (r.name && r.name.toLowerCase().includes(query)) ||
+          (r.roomNumber && r.roomNumber.toLowerCase().includes(query))
+        )
+      );
 
-  if (!found) return alert('No matching IN record found');
+      if (!found) return alert('No matching IN record found');
 
-  found.status = 'OUT';
-  found.outTime = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit', second:'2-digit'});
-  found.updatedAt = new Date().toISOString();
+      found.status = 'OUT';
+      found.outTime = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit', second:'2-digit'});
+      found.updatedAt = new Date().toISOString();
 
-  saveRecords();
-  alert('Marked OUT for: ' + found.name);
-  document.getElementById('quickOutSearch').value = '';
-}
-
+      saveRecords();
+      alert('Marked OUT for: ' + found.name);
+      document.getElementById('quickOutSearch').value = '';
+    }
+    window.quickMarkOut = quickMarkOut;
 
     // init
     setDefaults();
