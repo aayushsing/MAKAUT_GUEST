@@ -1412,6 +1412,35 @@
           </div>
         </div>
 
+        <div class="charges-section" style="margin-top:8px;">
+          <div class="card-title">
+            <h4 id="modalGstTitle">GST (Indian Tax)</h4>
+            <span class="subtext" id="modalGstHint">Hotel ≤ ₹7,500/day: 12% • Above: 18%</span>
+          </div>
+          <div class="chip-row" id="gstPresets">
+            <button type="button" class="chip preset-chip" data-gst="0">0%</button>
+            <button type="button" class="chip preset-chip" data-gst="5">5%</button>
+            <button type="button" class="chip preset-chip" data-gst="12">12%</button>
+            <button type="button" class="chip preset-chip" data-gst="18">18%</button>
+          </div>
+          <div class="grid-2" style="margin-top:6px;">
+            <div class="field">
+              <label id="modalGstPercentLabel" for="modalGstPercent">GST Rate (%)</label>
+              <input id="modalGstPercent" type="number" min="0" max="50" step="0.01" value="0" />
+            </div>
+            <div class="field">
+              <label id="modalGstNumberLabel" for="modalGstNumber">GSTIN (Optional)</label>
+              <input id="modalGstNumber" type="text" placeholder="22AAAAA0000A1Z5" />
+            </div>
+          </div>
+          <div class="row" style="gap:14px; align-items:center; margin-top:4px;">
+            <label style="display:inline-flex; align-items:center; gap:6px; font-size:14px;">
+              <input type="checkbox" id="modalGstSplit" checked />
+              <span id="modalGstSplitLabel">Split as CGST + SGST (intra-state)</span>
+            </label>
+          </div>
+        </div>
+
         <div class="charges-section">
           <div class="card-title" style="margin-top:6px;">
             <h4 id="modalExtraTitle">Extra Charges</h4>
@@ -1430,12 +1459,17 @@
         <div class="bill-summary">
           <div class="bill-line"><span id="billBedLabel">Bed Charge</span><span id="billBed">₹0</span></div>
           <div class="bill-line"><span id="billExtraLabel">Extra Charges</span><span id="billExtra">₹0</span></div>
+          <div class="bill-line" id="billSubtotalLine"><span id="billSubtotalLabel">Subtotal</span><span id="billSubtotal">₹0</span></div>
+          <div class="bill-line hidden" id="billCgstLine"><span id="billCgstLabel">CGST</span><span id="billCgst">₹0</span></div>
+          <div class="bill-line hidden" id="billSgstLine"><span id="billSgstLabel">SGST</span><span id="billSgst">₹0</span></div>
+          <div class="bill-line hidden" id="billIgstLine"><span id="billIgstLabel">GST</span><span id="billIgst">₹0</span></div>
           <div class="bill-line bill-total"><span id="billTotalLabel">Grand Total</span><span id="billTotal">₹0</span></div>
         </div>
 
         <div class="row" style="margin-top:14px;">
           <button class="btn primary" id="confirmCheckoutBtn">✓ Mark OUT & Generate Bill</button>
-          <button class="btn warn" id="markOutOnlyBtn">Mark OUT Only</button>
+          <button class="btn warn" id="markOutOnlyBtn">Save Bill (No PDF)</button>
+          <button class="btn secondary" id="skipBillBtn">✗ Skip Bill</button>
           <button class="btn secondary" id="modalBackBtn">‹ Back</button>
         </div>
       </div>
@@ -1625,8 +1659,20 @@
         bedChargeLabel: 'Bed Charge',
         extraLabel: 'Extra Charges',
         grandTotal: 'Grand Total',
+        gstTitle: 'GST (Indian Tax)',
+        gstHint: 'Hotel ≤ ₹7,500/day: 12% • Above: 18%',
+        gstPercent: 'GST Rate (%)',
+        gstNumber: 'GSTIN (Optional)',
+        gstSplitLabel: 'Split as CGST + SGST (intra-state)',
+        subtotalLabel: 'Subtotal',
+        cgstLabel: 'CGST',
+        sgstLabel: 'SGST',
+        igstLabel: 'GST',
         confirmCheckoutBtn: '✓ Mark OUT & Generate Bill',
-        markOutOnlyBtn: 'Mark OUT Only',
+        markOutOnlyBtn: 'Save Bill (No PDF)',
+        skipBillBtn: '✗ Skip Bill',
+        skipBillDone: 'Marked OUT (bill skipped).',
+        generateBillBtn: '+ Generate Bill',
         backBtn: '‹ Back',
         enterQuery: 'Enter name or room number',
         noMatch: 'No matching IN record found',
@@ -1770,8 +1816,20 @@
         bedChargeLabel: 'বেড চার্জ',
         extraLabel: 'অতিরিক্ত চার্জ',
         grandTotal: 'মোট অংক',
+        gstTitle: 'GST (ভারতীয় কর)',
+        gstHint: 'হোটেল ≤ ₹৭,৫০০/দিন: ১২% • উপরে: ১৮%',
+        gstPercent: 'GST হার (%)',
+        gstNumber: 'GSTIN (ঐচ্ছিক)',
+        gstSplitLabel: 'CGST + SGST হিসাবে ভাগ করুন (একই রাজ্য)',
+        subtotalLabel: 'সাব-টোটাল',
+        cgstLabel: 'CGST',
+        sgstLabel: 'SGST',
+        igstLabel: 'GST',
         confirmCheckoutBtn: '✓ OUT মার্ক ও বিল তৈরি',
-        markOutOnlyBtn: 'শুধু OUT মার্ক',
+        markOutOnlyBtn: 'বিল সেভ করুন (PDF নেই)',
+        skipBillBtn: '✗ বিল স্কিপ করুন',
+        skipBillDone: 'OUT মার্ক হয়েছে (বিল স্কিপ)।',
+        generateBillBtn: '+ বিল তৈরি',
         backBtn: '‹ পেছনে',
         enterQuery: 'নাম বা রুম নম্বর লিখুন',
         noMatch: 'কোনো IN রেকর্ড পাওয়া যায়নি',
@@ -2005,10 +2063,30 @@
       if (billExtraLabelEl) billExtraLabelEl.textContent = t.extraLabel;
       const billTotalLabelEl = document.getElementById('billTotalLabel');
       if (billTotalLabelEl) billTotalLabelEl.textContent = t.grandTotal;
+      const billSubtotalLabelEl = document.getElementById('billSubtotalLabel');
+      if (billSubtotalLabelEl) billSubtotalLabelEl.textContent = t.subtotalLabel;
+      const billCgstLabelEl = document.getElementById('billCgstLabel');
+      if (billCgstLabelEl) billCgstLabelEl.textContent = t.cgstLabel;
+      const billSgstLabelEl = document.getElementById('billSgstLabel');
+      if (billSgstLabelEl) billSgstLabelEl.textContent = t.sgstLabel;
+      const billIgstLabelEl = document.getElementById('billIgstLabel');
+      if (billIgstLabelEl) billIgstLabelEl.textContent = t.igstLabel;
+      const modalGstTitleEl = document.getElementById('modalGstTitle');
+      if (modalGstTitleEl) modalGstTitleEl.textContent = t.gstTitle;
+      const modalGstHintEl = document.getElementById('modalGstHint');
+      if (modalGstHintEl) modalGstHintEl.textContent = t.gstHint;
+      const modalGstPercentLabelEl = document.getElementById('modalGstPercentLabel');
+      if (modalGstPercentLabelEl) modalGstPercentLabelEl.textContent = t.gstPercent;
+      const modalGstNumberLabelEl = document.getElementById('modalGstNumberLabel');
+      if (modalGstNumberLabelEl) modalGstNumberLabelEl.textContent = t.gstNumber;
+      const modalGstSplitLabelEl = document.getElementById('modalGstSplitLabel');
+      if (modalGstSplitLabelEl) modalGstSplitLabelEl.textContent = t.gstSplitLabel;
       const confirmCheckoutBtnEl = document.getElementById('confirmCheckoutBtn');
       if (confirmCheckoutBtnEl) confirmCheckoutBtnEl.textContent = t.confirmCheckoutBtn;
       const markOutOnlyBtnEl = document.getElementById('markOutOnlyBtn');
       if (markOutOnlyBtnEl) markOutOnlyBtnEl.textContent = t.markOutOnlyBtn;
+      const skipBillBtnEl = document.getElementById('skipBillBtn');
+      if (skipBillBtnEl) skipBillBtnEl.textContent = t.skipBillBtn;
       const modalBackBtnEl = document.getElementById('modalBackBtn');
       if (modalBackBtnEl) modalBackBtnEl.textContent = t.backBtn;
       const modalPickHintEl = document.getElementById('modalPickHint');
@@ -2114,6 +2192,13 @@
         extraCharges: existing?.extraCharges || [],
         bedCharge: existing?.bedCharge || 0,
         extraTotal: existing?.extraTotal || 0,
+        subtotal: existing?.subtotal || 0,
+        gstPercent: existing?.gstPercent || 0,
+        gstSplit: existing?.gstSplit !== false,
+        gstAmount: existing?.gstAmount || 0,
+        cgstAmount: existing?.cgstAmount || 0,
+        sgstAmount: existing?.sgstAmount || 0,
+        gstNumber: existing?.gstNumber || '',
         totalAmount: existing?.totalAmount || 0,
         billNumber: existing?.billNumber || '',
         createdAt: existing?.createdAt || new Date().toISOString(),
@@ -2163,6 +2248,13 @@
         extraCharges: existing?.extraCharges || [],
         bedCharge: existing?.bedCharge || 0,
         extraTotal: existing?.extraTotal || 0,
+        subtotal: existing?.subtotal || 0,
+        gstPercent: existing?.gstPercent || 0,
+        gstSplit: existing?.gstSplit !== false,
+        gstAmount: existing?.gstAmount || 0,
+        cgstAmount: existing?.cgstAmount || 0,
+        sgstAmount: existing?.sgstAmount || 0,
+        gstNumber: existing?.gstNumber || '',
         totalAmount: existing?.totalAmount || 0,
         billNumber: existing?.billNumber || '',
         createdAt: existing?.createdAt || new Date().toISOString(),
@@ -2229,7 +2321,8 @@
         } else if (r.totalAmount && r.totalAmount > 0) {
           billCell = `${inr(r.totalAmount)}<br><button class="btn small secondary" style="margin-top:4px;" onclick="reprintBill('${r.id}')">${t.printBill}</button>`;
         } else {
-          billCell = `<span class="subtext">-</span>`;
+          // OUT but bill was skipped — let user still create a bill later
+          billCell = `<button class="btn small secondary" onclick="openCheckoutFor('${r.id}')">${t.generateBillBtn}</button>`;
         }
         tr.innerHTML = `
           <td><span class="badge ${r.type === 'Teacher' ? 'teacher' : 'guest'}">${r.type === 'Teacher' ? t.teacher : t.guest}</span></td>
@@ -2390,6 +2483,12 @@
         BedRate: r.bedRate || '',
         BedCharge: r.bedCharge || '',
         ExtraTotal: r.extraTotal || '',
+        Subtotal: r.subtotal || '',
+        GSTPercent: r.gstPercent || '',
+        CGST: r.cgstAmount || '',
+        SGST: r.sgstAmount || '',
+        GSTAmount: r.gstAmount || '',
+        GSTIN: r.gstNumber || '',
         TotalAmount: r.totalAmount || '',
         BillNumber: r.billNumber || '',
         Remarks: r.remarks
@@ -2518,6 +2617,13 @@
               extraCharges: [],
               bedCharge: 0,
               extraTotal: 0,
+              subtotal: 0,
+              gstPercent: 0,
+              gstSplit: true,
+              gstAmount: 0,
+              cgstAmount: 0,
+              sgstAmount: 0,
+              gstNumber: '',
               totalAmount: 0,
               billNumber: '',
               createdAt: new Date().toISOString(),
@@ -2602,6 +2708,11 @@
         r.extraCharges.forEach(c => addExtraRow(c.desc, c.amount));
       }
 
+      // GST: restore from record if present; otherwise default 0
+      modalGstPercent.value = (r.gstPercent != null ? r.gstPercent : 0);
+      modalGstNumber.value = r.gstNumber || '';
+      modalGstSplit.checked = (r.gstSplit !== false); // default true (intra-state)
+
       recalculateTotal();
       checkoutOverlay.classList.remove('hidden');
     };
@@ -2643,6 +2754,7 @@
     }
 
     function recalculateTotal() {
+      const t = getLang();
       const beds = Math.max(1, Number(modalBeds.value) || 1);
       const rate = Math.max(0, Number(modalRate.value) || 0);
       const days = Math.max(1, Number(modalDays.value) || 1);
@@ -2650,9 +2762,40 @@
       modalRoomCharge.value = bedTotal;
       const extras = readExtraCharges();
       const extraTotal = extras.reduce((a,b) => a + (b.amount || 0), 0);
+      const subtotal = bedTotal + extraTotal;
+      const gstPercent = Math.max(0, Number(modalGstPercent.value) || 0);
+      const split = !!modalGstSplit.checked;
+      const gstAmount = Math.round((subtotal * gstPercent) / 100 * 100) / 100;
+      const cgstAmount = split ? Math.round((gstAmount / 2) * 100) / 100 : 0;
+      const sgstAmount = split ? (gstAmount - cgstAmount) : 0;
+      const grand = subtotal + gstAmount;
+
       billBed.textContent = inr(bedTotal);
       billExtra.textContent = inr(extraTotal);
-      billTotal.textContent = inr(bedTotal + extraTotal);
+      billSubtotal.textContent = inr(subtotal);
+      billTotal.textContent = inr(grand);
+
+      if (gstPercent > 0) {
+        if (split) {
+          billCgstLabel.textContent = `${t.cgstLabel} (${(gstPercent/2)}%)`;
+          billSgstLabel.textContent = `${t.sgstLabel} (${(gstPercent/2)}%)`;
+          billCgst.textContent = inr(cgstAmount);
+          billSgst.textContent = inr(sgstAmount);
+          billCgstLine.classList.remove('hidden');
+          billSgstLine.classList.remove('hidden');
+          billIgstLine.classList.add('hidden');
+        } else {
+          billIgstLabel.textContent = `${t.igstLabel} (${gstPercent}%)`;
+          billIgst.textContent = inr(gstAmount);
+          billIgstLine.classList.remove('hidden');
+          billCgstLine.classList.add('hidden');
+          billSgstLine.classList.add('hidden');
+        }
+      } else {
+        billCgstLine.classList.add('hidden');
+        billSgstLine.classList.add('hidden');
+        billIgstLine.classList.add('hidden');
+      }
     }
 
     function confirmCheckout(generateBill = true) {
@@ -2665,7 +2808,13 @@
       const extras = readExtraCharges();
       const bedTotal = beds * rate * days;
       const extraTotal = extras.reduce((a,b) => a + (b.amount || 0), 0);
-      const grandTotal = bedTotal + extraTotal;
+      const subtotal = bedTotal + extraTotal;
+      const gstPercent = Math.max(0, Number(modalGstPercent.value) || 0);
+      const gstSplit = !!modalGstSplit.checked;
+      const gstAmount = Math.round((subtotal * gstPercent) / 100 * 100) / 100;
+      const cgstAmount = gstSplit ? Math.round((gstAmount / 2) * 100) / 100 : 0;
+      const sgstAmount = gstSplit ? (gstAmount - cgstAmount) : 0;
+      const grandTotal = subtotal + gstAmount;
 
       r.status = 'OUT';
       r.outTime = (modalOutTime.value || nowTime()).trim();
@@ -2676,6 +2825,13 @@
       r.extraCharges = extras;
       r.bedCharge = bedTotal;
       r.extraTotal = extraTotal;
+      r.subtotal = subtotal;
+      r.gstPercent = gstPercent;
+      r.gstSplit = gstSplit;
+      r.gstAmount = gstAmount;
+      r.cgstAmount = cgstAmount;
+      r.sgstAmount = sgstAmount;
+      r.gstNumber = (modalGstNumber.value || '').trim();
       r.totalAmount = grandTotal;
       r.billNumber = r.billNumber || ('B' + Date.now().toString().slice(-7));
       r.updatedAt = new Date().toISOString();
@@ -2689,6 +2845,35 @@
     function closeCheckoutModal() {
       checkoutOverlay.classList.add('hidden');
       checkoutState.recordId = null;
+    }
+
+    function skipBillCheckout() {
+      const t = getLang();
+      const r = records.find(x => x.id === checkoutState.recordId);
+      if (!r) return;
+      // Just flip status to OUT with the chosen out date/time. No bill data is saved.
+      r.status = 'OUT';
+      r.outTime = (modalOutTime.value || nowTime()).trim();
+      r.outDate = modalOutDate.value || todayISO();
+      // Clear any bill-related fields so the record stays "no bill"
+      r.bedCount = r.bedCount || 1;
+      r.bedRate = r.bedRate ?? DEFAULT_BED_RATE;
+      r.stayDays = 0;
+      r.extraCharges = [];
+      r.bedCharge = 0;
+      r.extraTotal = 0;
+      r.subtotal = 0;
+      r.gstPercent = 0;
+      r.gstAmount = 0;
+      r.cgstAmount = 0;
+      r.sgstAmount = 0;
+      r.totalAmount = 0;
+      r.billNumber = '';
+      r.gstNumber = '';
+      r.updatedAt = new Date().toISOString();
+      saveRecords();
+      closeCheckoutModal();
+      showToast(t.skipBillDone);
     }
 
     window.reprintBill = function(id) {
@@ -2717,6 +2902,11 @@
       doc.setFontSize(11);
       doc.text(`Bill No: ${r.billNumber || '-'}`, 14, 40);
       doc.text(`Bill Date: ${todayISO()}`, 150, 40);
+      if (r.gstNumber) {
+        doc.setFontSize(9);
+        doc.text(`GSTIN: ${r.gstNumber}`, 14, 45);
+        doc.setFontSize(11);
+      }
 
       // Guest info box
       doc.setDrawColor(180);
@@ -2757,6 +2947,18 @@
       (r.extraCharges || []).forEach((c, i) => {
         body.push([String(i + 2), c.desc || 'Extra', `Rs. ${(c.amount || 0).toLocaleString('en-IN')}`]);
       });
+      const subtotalRowIdx = body.length;
+      const subtotalVal = r.subtotal != null ? r.subtotal : ((r.bedCharge||0) + (r.extraTotal||0));
+      const gstP = r.gstPercent || 0;
+      if (gstP > 0) {
+        body.push(['', 'Subtotal', `Rs. ${subtotalVal.toLocaleString('en-IN')}`]);
+        if (r.gstSplit) {
+          body.push(['', `CGST @ ${gstP/2}%`, `Rs. ${(r.cgstAmount||0).toLocaleString('en-IN')}`]);
+          body.push(['', `SGST @ ${gstP/2}%`, `Rs. ${(r.sgstAmount||0).toLocaleString('en-IN')}`]);
+        } else {
+          body.push(['', `GST @ ${gstP}%`, `Rs. ${(r.gstAmount||0).toLocaleString('en-IN')}`]);
+        }
+      }
 
       doc.autoTable({
         startY: 124,
@@ -2764,7 +2966,13 @@
         body,
         styles: { fontSize: 10, cellPadding: 3 },
         headStyles: { fillColor: [37,99,235], textColor: 255 },
-        columnStyles: { 0: { cellWidth: 14 }, 2: { halign: 'right', cellWidth: 40 } }
+        columnStyles: { 0: { cellWidth: 14 }, 2: { halign: 'right', cellWidth: 40 } },
+        didParseCell: (data) => {
+          if (data.section === 'body' && data.row.index >= subtotalRowIdx) {
+            data.cell.styles.fontStyle = 'bold';
+            data.cell.styles.fillColor = [240, 244, 255];
+          }
+        }
       });
 
       let y = doc.lastAutoTable.finalY + 6;
@@ -2895,8 +3103,23 @@
     const billBed = document.getElementById('billBed');
     const billExtra = document.getElementById('billExtra');
     const billTotal = document.getElementById('billTotal');
+    const billSubtotal = document.getElementById('billSubtotal');
+    const billCgst = document.getElementById('billCgst');
+    const billSgst = document.getElementById('billSgst');
+    const billIgst = document.getElementById('billIgst');
+    const billCgstLine = document.getElementById('billCgstLine');
+    const billSgstLine = document.getElementById('billSgstLine');
+    const billIgstLine = document.getElementById('billIgstLine');
+    const billCgstLabel = document.getElementById('billCgstLabel');
+    const billSgstLabel = document.getElementById('billSgstLabel');
+    const billIgstLabel = document.getElementById('billIgstLabel');
+    const modalGstPercent = document.getElementById('modalGstPercent');
+    const modalGstNumber = document.getElementById('modalGstNumber');
+    const modalGstSplit = document.getElementById('modalGstSplit');
+    const gstPresets = document.getElementById('gstPresets');
     const confirmCheckoutBtn = document.getElementById('confirmCheckoutBtn');
     const markOutOnlyBtn = document.getElementById('markOutOnlyBtn');
+    const skipBillBtn = document.getElementById('skipBillBtn');
     const modalCloseBtn = document.getElementById('modalCloseBtn');
     const modalBackBtn = document.getElementById('modalBackBtn');
 
@@ -2961,8 +3184,11 @@
     });
     confirmCheckoutBtn.addEventListener('click', () => confirmCheckout(true));
     markOutOnlyBtn.addEventListener('click', () => confirmCheckout(false));
+    skipBillBtn.addEventListener('click', skipBillCheckout);
 
     [modalBeds, modalRate, modalDays].forEach(el => el.addEventListener('input', recalculateTotal));
+    modalGstPercent.addEventListener('input', recalculateTotal);
+    modalGstSplit.addEventListener('change', recalculateTotal);
     modalOutDate.addEventListener('change', () => {
       // Auto-update days when out date changes (using current record's in date)
       const r = records.find(x => x.id === checkoutState.recordId);
@@ -2973,8 +3199,21 @@
       recalculateTotal();
     });
 
-    /* Preset chips: add Food/Water/Laundry/etc with amount=0 (user fills the amount) */
-    document.querySelectorAll('.preset-chip').forEach(chip => {
+    /* GST preset chips: set the % */
+    if (gstPresets) {
+      gstPresets.querySelectorAll('.preset-chip').forEach(chip => {
+        chip.addEventListener('click', () => {
+          const v = Number(chip.dataset.gst);
+          if (!isNaN(v)) {
+            modalGstPercent.value = v;
+            recalculateTotal();
+          }
+        });
+      });
+    }
+
+    /* Preset chips for extra charges (Food/Water/etc): scoped to extraPresets only */
+    document.querySelectorAll('#extraPresets .preset-chip').forEach(chip => {
       chip.addEventListener('click', () => {
         addExtraRow(chip.dataset.desc || 'Extra', 0);
       });
