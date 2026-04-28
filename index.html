@@ -508,10 +508,11 @@
       margin-bottom: 12px;
     }
 
-    .card-title h2, .card-title h3 {
+    .card-title h2, .card-title h3, .card-title h4 {
       margin: 0;
       font-size: 18px;
     }
+    .card-title h4 { font-size: 15px; }
 
     .subtext {
       color: var(--muted);
@@ -822,6 +823,10 @@
       font-weight: 700;
     }
 
+    body.dark .chip {
+      background: rgba(30,41,59,.6);
+    }
+
     .hidden { display: none !important; }
 
     .footer-note {
@@ -829,6 +834,148 @@
       color: var(--muted);
       padding: 20px 0 0;
       font-size: 12px;
+    }
+
+    /* ============== Checkout / Bill modal ============== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(7, 17, 31, 0.62);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      animation: fadeUp .25s ease;
+    }
+    .modal-box {
+      background: var(--card-strong);
+      color: var(--text);
+      border-radius: 26px;
+      padding: 22px;
+      width: min(760px, 100%);
+      max-height: 92vh;
+      overflow: auto;
+      border: 1px solid var(--line);
+      box-shadow: 0 30px 70px rgba(2, 8, 23, 0.45);
+    }
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .modal-header h3 { margin: 0; font-size: 19px; font-weight: 900; }
+    .modal-close {
+      background: transparent;
+      border: 0;
+      font-size: 22px;
+      color: var(--muted);
+      cursor: pointer;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-weight: 900;
+    }
+    .modal-close:hover { background: rgba(239,68,68,.14); color: var(--danger); }
+    .modal-step.hidden { display: none; }
+    .match-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .match-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--card);
+      cursor: pointer;
+      transition: .2s ease;
+    }
+    .match-row:hover {
+      border-color: var(--primary);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 22px rgba(37,99,235,.18);
+    }
+    .match-row .info { flex: 1; min-width: 0; }
+    .match-row .info b { display: block; font-size: 15px; margin-bottom: 4px; }
+    .match-row .info span { color: var(--muted); font-size: 12px; }
+    .checkout-info {
+      background: linear-gradient(135deg, rgba(37,99,235,.12), rgba(124,58,237,.12));
+      border: 1px solid var(--line);
+      padding: 14px 16px;
+      border-radius: 16px;
+      margin-bottom: 14px;
+      font-size: 13.5px;
+      line-height: 1.7;
+    }
+    .checkout-info b { font-size: 15.5px; }
+    .charges-section { margin-top: 16px; }
+    .preset-chip {
+      border: 0;
+      cursor: pointer;
+      background: rgba(37,99,235,.14);
+      color: var(--primary);
+      font-weight: 800;
+    }
+    .preset-chip:hover { background: rgba(37,99,235,.28); }
+    body.dark .preset-chip { background: rgba(96,165,250,.18); color: var(--primary); }
+    body.dark .preset-chip:hover { background: rgba(96,165,250,.32); }
+    .extra-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .extra-row {
+      display: grid;
+      grid-template-columns: 1.4fr .9fr auto;
+      gap: 8px;
+      align-items: center;
+    }
+    .extra-row input { border-radius: 12px; padding: 10px 12px; }
+    .extra-row .remove-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      border: 0;
+      background: rgba(239,68,68,.14);
+      color: var(--danger);
+      font-weight: 900;
+      font-size: 18px;
+      cursor: pointer;
+    }
+    .extra-row .remove-btn:hover { background: rgba(239,68,68,.28); }
+    .bill-summary {
+      margin-top: 16px;
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(16,185,129,.1), rgba(37,99,235,.08));
+      border: 1px solid var(--line);
+    }
+    .bill-line {
+      display: flex;
+      justify-content: space-between;
+      padding: 6px 0;
+      font-size: 14px;
+    }
+    .bill-line.bill-total {
+      border-top: 2px dashed var(--line);
+      margin-top: 8px;
+      padding-top: 10px;
+      font-size: 18px;
+      font-weight: 900;
+      color: var(--primary);
+    }
+    @media (max-width: 640px) {
+      .extra-row { grid-template-columns: 1fr 1fr auto; }
+      .modal-box { padding: 18px; border-radius: 22px; }
     }
 
     @media (max-width: 1100px) {
@@ -1002,6 +1149,7 @@
             <span class="chip" id="chip3">Excel Export</span>
             <span class="chip" id="chip4">PDF Export</span>
             <span class="chip" id="chip5">Backup JSON</span>
+            <span class="chip" id="chip6">🧾 Auto Bill</span>
           </div>
           <div class="footer-note" id="mobileNote">Works well on Android and iPhone browser. Add to Home Screen for app-like use.</div>
         </div>
@@ -1096,12 +1244,13 @@
 
       <div class="card" style="margin-bottom:12px;">
         <div class="card-title">
-          <h3>Quick OUT Entry</h3>
+          <h3 id="quickOutTitle">Quick OUT Entry / Generate Bill</h3>
         </div>
         <div class="row">
-          <input id="quickOutSearch" placeholder="Search by name or room..." />
-          <button class="btn danger" onclick="quickMarkOut()">Mark OUT</button>
+          <input id="quickOutSearch" placeholder="Search by name or room number..." />
+          <button class="btn danger" onclick="quickMarkOut()" id="quickOutBtn">🧾 Checkout & Bill</button>
         </div>
+        <div class="notice" id="quickOutNotice" style="margin-top:10px;">If multiple guests share a room, you can pick the right one. You can edit out time and add charges (food, water, etc.) before saving.</div>
       </div>
 
       <div class="card">
@@ -1139,6 +1288,7 @@
                 <th id="thInTime">In Time</th>
                 <th id="thOutTime">Out Time</th>
                 <th id="thStatus">Status</th>
+                <th id="thBill">Bill</th>
                 <th id="thAction">Action</th>
               </tr>
             </thead>
@@ -1214,6 +1364,84 @@
     <button class="tab-btn" id="quickInsideBtn"><span>🟢</span><span id="tabInside">Inside</span></button>
   </nav>
 
+  <!-- ===== Checkout / Bill Modal ===== -->
+  <div id="checkoutOverlay" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="modalTitle">Check-Out & Bill</h3>
+        <button class="modal-close" id="modalCloseBtn" aria-label="Close">✕</button>
+      </div>
+
+      <!-- Step 1: Pick from multiple matches -->
+      <div id="modalStepPick" class="modal-step">
+        <p class="subtext" id="modalPickHint">Multiple guests are currently inside matching your search. Choose one to checkout:</p>
+        <div id="matchList" class="match-list"></div>
+      </div>
+
+      <!-- Step 2: Edit out time + charges + bill -->
+      <div id="modalStepCheckout" class="modal-step hidden">
+        <div class="checkout-info" id="checkoutInfo"></div>
+
+        <div class="form-grid">
+          <div class="field">
+            <label id="modalOutDateLabel" for="modalOutDate">Out Date</label>
+            <input id="modalOutDate" type="date" />
+          </div>
+          <div class="field">
+            <label id="modalOutTimeLabel" for="modalOutTime">Out Time (editable)</label>
+            <div class="time-row">
+              <input id="modalOutTime" placeholder="e.g. 06:45 PM" />
+              <button type="button" class="btn secondary small" onclick="setNowTime('modalOutTime')">Now</button>
+            </div>
+          </div>
+          <div class="field">
+            <label id="modalBedsLabel" for="modalBeds">Number of Beds</label>
+            <input id="modalBeds" type="number" min="1" value="1" />
+          </div>
+          <div class="field">
+            <label id="modalRateLabel" for="modalRate">Rate per Bed / Day (₹)</label>
+            <input id="modalRate" type="number" min="0" value="800" />
+          </div>
+          <div class="field">
+            <label id="modalDaysLabel" for="modalDays">Number of Days</label>
+            <input id="modalDays" type="number" min="1" value="1" />
+          </div>
+          <div class="field">
+            <label id="modalRoomChargeLabel" for="modalRoomCharge">Bed Charge Total (₹)</label>
+            <input id="modalRoomCharge" type="number" readonly />
+          </div>
+        </div>
+
+        <div class="charges-section">
+          <div class="card-title" style="margin-top:6px;">
+            <h4 id="modalExtraTitle">Extra Charges</h4>
+            <span class="subtext" id="modalExtraHint">Add water, food, laundry, etc.</span>
+          </div>
+          <div class="chip-row" id="extraPresets">
+            <button type="button" class="chip preset-chip" data-desc="Food">+ Food</button>
+            <button type="button" class="chip preset-chip" data-desc="Water">+ Water</button>
+            <button type="button" class="chip preset-chip" data-desc="Laundry">+ Laundry</button>
+            <button type="button" class="chip preset-chip" data-desc="Tea / Coffee">+ Tea / Coffee</button>
+            <button type="button" class="chip preset-chip" data-desc="Other">+ Other</button>
+          </div>
+          <div id="extraChargesWrap" class="extra-list"></div>
+        </div>
+
+        <div class="bill-summary">
+          <div class="bill-line"><span id="billBedLabel">Bed Charge</span><span id="billBed">₹0</span></div>
+          <div class="bill-line"><span id="billExtraLabel">Extra Charges</span><span id="billExtra">₹0</span></div>
+          <div class="bill-line bill-total"><span id="billTotalLabel">Grand Total</span><span id="billTotal">₹0</span></div>
+        </div>
+
+        <div class="row" style="margin-top:14px;">
+          <button class="btn primary" id="confirmCheckoutBtn">✓ Mark OUT & Generate Bill</button>
+          <button class="btn warn" id="markOutOnlyBtn">Mark OUT Only</button>
+          <button class="btn secondary" id="modalBackBtn">‹ Back</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
     /* =========================================================
        PWA MANIFEST (inline as Blob URL - no external files)
@@ -1260,6 +1488,8 @@
     const STORAGE_KEY = 'makaut_guest_house_records_v2';
     const SETTINGS_KEY = 'makaut_guest_house_settings_v2';
     const editState = { id: null, type: null };
+    const checkoutState = { recordId: null };
+    const DEFAULT_BED_RATE = 800;
 
     const translations = {
       en: {
@@ -1372,7 +1602,40 @@
         markOut: 'Mark OUT',
         markIn: 'Mark IN',
         guest: 'Guest',
-        teacher: 'Teacher'
+        teacher: 'Teacher',
+        /* New checkout / bill strings */
+        quickOutTitle: 'Quick OUT Entry / Generate Bill',
+        quickOutBtn: '🧾 Checkout & Bill',
+        quickOutPh: 'Search by name or room number...',
+        quickOutNotice: 'If multiple guests share a room, you can pick the right one. You can edit out time and add charges (food, water, etc.) before saving.',
+        bill: 'Bill',
+        printBill: '🧾 Print Bill',
+        viewBill: '🧾 View Bill',
+        checkoutTitle: 'Check-Out & Bill',
+        pickGuestTitle: 'Select Guest',
+        pickGuestHint: 'Multiple guests are currently inside matching your search. Choose one to checkout:',
+        selectBtn: 'Select',
+        outDate: 'Out Date',
+        numBeds: 'Number of Beds',
+        ratePerBed: 'Rate per Bed / Day (₹)',
+        numDays: 'Number of Days',
+        bedChargeTotal: 'Bed Charge Total (₹)',
+        extraChargesTitle: 'Extra Charges',
+        extraChargesHint: 'Add water, food, laundry, etc.',
+        bedChargeLabel: 'Bed Charge',
+        extraLabel: 'Extra Charges',
+        grandTotal: 'Grand Total',
+        confirmCheckoutBtn: '✓ Mark OUT & Generate Bill',
+        markOutOnlyBtn: 'Mark OUT Only',
+        backBtn: '‹ Back',
+        enterQuery: 'Enter name or room number',
+        noMatch: 'No matching IN record found',
+        checkoutDone: 'Checked out & bill generated successfully.',
+        markOutDone: 'Marked OUT successfully.',
+        chargeDescPh: 'Description (e.g. Food)',
+        chargeAmtPh: 'Amount (₹)',
+        noBillYet: 'No bill (still IN)',
+        thBill: 'Bill'
       },
       bn: {
         appTitle: 'MAKAUT GUSET HOUSE',
@@ -1484,7 +1747,40 @@
         markOut: 'OUT দিন',
         markIn: 'IN দিন',
         guest: 'অতিথি',
-        teacher: 'শিক্ষক'
+        teacher: 'শিক্ষক',
+        /* New checkout / bill strings */
+        quickOutTitle: 'কুইক OUT এন্ট্রি / বিল তৈরি',
+        quickOutBtn: '🧾 চেকআউট ও বিল',
+        quickOutPh: 'নাম বা রুম নম্বর দিয়ে খুঁজুন...',
+        quickOutNotice: 'একই রুমে একাধিক অতিথি থাকলে সঠিক একজনকে বেছে নিতে পারবেন। বিল তৈরির আগে আউট টাইম ও অতিরিক্ত চার্জ (খাবার, পানি ইত্যাদি) যোগ করতে পারেন।',
+        bill: 'বিল',
+        printBill: '🧾 বিল প্রিন্ট',
+        viewBill: '🧾 বিল দেখুন',
+        checkoutTitle: 'চেক-আউট ও বিল',
+        pickGuestTitle: 'অতিথি নির্বাচন',
+        pickGuestHint: 'আপনার সার্চের সাথে মিলে যাওয়া একাধিক অতিথি ভিতরে আছেন। চেকআউট করতে একজন বেছে নিন:',
+        selectBtn: 'নির্বাচন',
+        outDate: 'আউট তারিখ',
+        numBeds: 'বেড সংখ্যা',
+        ratePerBed: 'প্রতি বেড / দিন রেট (₹)',
+        numDays: 'দিনের সংখ্যা',
+        bedChargeTotal: 'মোট বেড চার্জ (₹)',
+        extraChargesTitle: 'অতিরিক্ত চার্জ',
+        extraChargesHint: 'পানি, খাবার, লন্ড্রি ইত্যাদি যোগ করুন।',
+        bedChargeLabel: 'বেড চার্জ',
+        extraLabel: 'অতিরিক্ত চার্জ',
+        grandTotal: 'মোট অংক',
+        confirmCheckoutBtn: '✓ OUT মার্ক ও বিল তৈরি',
+        markOutOnlyBtn: 'শুধু OUT মার্ক',
+        backBtn: '‹ পেছনে',
+        enterQuery: 'নাম বা রুম নম্বর লিখুন',
+        noMatch: 'কোনো IN রেকর্ড পাওয়া যায়নি',
+        checkoutDone: 'চেকআউট ও বিল সফলভাবে তৈরি হয়েছে।',
+        markOutDone: 'OUT মার্ক সফল হয়েছে।',
+        chargeDescPh: 'বিবরণ (যেমন খাবার)',
+        chargeAmtPh: 'অংক (₹)',
+        noBillYet: 'বিল নেই (এখনও IN)',
+        thBill: 'বিল'
       }
     };
 
@@ -1533,12 +1829,18 @@
     window.setNowTime = function(fieldId) {
       const el = document.getElementById(fieldId);
       if (el) el.value = nowTime();
+      if (fieldId === 'modalOutTime') recalculateTotal();
     };
 
     function formatDateHuman(dateStr) {
       if (!dateStr) return '-';
       const d = new Date(dateStr + 'T00:00:00');
       return d.toLocaleDateString(undefined, { day: '2-digit', month: 'short', year: 'numeric' });
+    }
+
+    function inr(n) {
+      const v = Number(n) || 0;
+      return '₹' + v.toLocaleString('en-IN');
     }
 
     function showToast(message) {
@@ -1667,8 +1969,50 @@
       thInTime.textContent = t.inTime;
       thOutTime.textContent = t.outTime;
       thStatus.textContent = t.status;
+      thBill.textContent = t.thBill;
       thAction.textContent = t.action;
       emptyState.textContent = t.noRecords;
+
+      /* Quick out + modal labels */
+      const quickOutTitleEl = document.getElementById('quickOutTitle');
+      if (quickOutTitleEl) quickOutTitleEl.textContent = t.quickOutTitle;
+      const quickOutBtnEl = document.getElementById('quickOutBtn');
+      if (quickOutBtnEl) quickOutBtnEl.textContent = t.quickOutBtn;
+      const quickOutSearchEl = document.getElementById('quickOutSearch');
+      if (quickOutSearchEl) quickOutSearchEl.placeholder = t.quickOutPh;
+      const quickOutNoticeEl = document.getElementById('quickOutNotice');
+      if (quickOutNoticeEl) quickOutNoticeEl.textContent = t.quickOutNotice;
+
+      const modalOutDateLabelEl = document.getElementById('modalOutDateLabel');
+      if (modalOutDateLabelEl) modalOutDateLabelEl.textContent = t.outDate;
+      const modalOutTimeLabelEl = document.getElementById('modalOutTimeLabel');
+      if (modalOutTimeLabelEl) modalOutTimeLabelEl.textContent = t.outTimeEditable;
+      const modalBedsLabelEl = document.getElementById('modalBedsLabel');
+      if (modalBedsLabelEl) modalBedsLabelEl.textContent = t.numBeds;
+      const modalRateLabelEl = document.getElementById('modalRateLabel');
+      if (modalRateLabelEl) modalRateLabelEl.textContent = t.ratePerBed;
+      const modalDaysLabelEl = document.getElementById('modalDaysLabel');
+      if (modalDaysLabelEl) modalDaysLabelEl.textContent = t.numDays;
+      const modalRoomChargeLabelEl = document.getElementById('modalRoomChargeLabel');
+      if (modalRoomChargeLabelEl) modalRoomChargeLabelEl.textContent = t.bedChargeTotal;
+      const modalExtraTitleEl = document.getElementById('modalExtraTitle');
+      if (modalExtraTitleEl) modalExtraTitleEl.textContent = t.extraChargesTitle;
+      const modalExtraHintEl = document.getElementById('modalExtraHint');
+      if (modalExtraHintEl) modalExtraHintEl.textContent = t.extraChargesHint;
+      const billBedLabelEl = document.getElementById('billBedLabel');
+      if (billBedLabelEl) billBedLabelEl.textContent = t.bedChargeLabel;
+      const billExtraLabelEl = document.getElementById('billExtraLabel');
+      if (billExtraLabelEl) billExtraLabelEl.textContent = t.extraLabel;
+      const billTotalLabelEl = document.getElementById('billTotalLabel');
+      if (billTotalLabelEl) billTotalLabelEl.textContent = t.grandTotal;
+      const confirmCheckoutBtnEl = document.getElementById('confirmCheckoutBtn');
+      if (confirmCheckoutBtnEl) confirmCheckoutBtnEl.textContent = t.confirmCheckoutBtn;
+      const markOutOnlyBtnEl = document.getElementById('markOutOnlyBtn');
+      if (markOutOnlyBtnEl) markOutOnlyBtnEl.textContent = t.markOutOnlyBtn;
+      const modalBackBtnEl = document.getElementById('modalBackBtn');
+      if (modalBackBtnEl) modalBackBtnEl.textContent = t.backBtn;
+      const modalPickHintEl = document.getElementById('modalPickHint');
+      if (modalPickHintEl) modalPickHintEl.textContent = t.pickGuestHint;
     }
 
     function applyTheme() {
@@ -1762,6 +2106,16 @@
         remarks: guestRemarks.value.trim(),
         inTime,
         outTime,
+        // Preserve any prior bill data on edit
+        outDate: existing?.outDate || '',
+        bedCount: existing?.bedCount || 1,
+        bedRate: existing?.bedRate ?? DEFAULT_BED_RATE,
+        stayDays: existing?.stayDays || 1,
+        extraCharges: existing?.extraCharges || [],
+        bedCharge: existing?.bedCharge || 0,
+        extraTotal: existing?.extraTotal || 0,
+        totalAmount: existing?.totalAmount || 0,
+        billNumber: existing?.billNumber || '',
         createdAt: existing?.createdAt || new Date().toISOString(),
         updatedAt: new Date().toISOString()
       };
@@ -1802,6 +2156,15 @@
         remarks: teacherRemarks.value.trim(),
         inTime,
         outTime,
+        outDate: existing?.outDate || '',
+        bedCount: existing?.bedCount || 1,
+        bedRate: existing?.bedRate ?? DEFAULT_BED_RATE,
+        stayDays: existing?.stayDays || 1,
+        extraCharges: existing?.extraCharges || [],
+        bedCharge: existing?.bedCharge || 0,
+        extraTotal: existing?.extraTotal || 0,
+        totalAmount: existing?.totalAmount || 0,
+        billNumber: existing?.billNumber || '',
         createdAt: existing?.createdAt || new Date().toISOString(),
         updatedAt: new Date().toISOString()
       };
@@ -1860,6 +2223,14 @@
 
       list.forEach(r => {
         const tr = document.createElement('tr');
+        let billCell = '';
+        if (r.status === 'IN') {
+          billCell = `<button class="btn small primary" onclick="openCheckoutFor('${r.id}')">${t.quickOutBtn}</button>`;
+        } else if (r.totalAmount && r.totalAmount > 0) {
+          billCell = `${inr(r.totalAmount)}<br><button class="btn small secondary" style="margin-top:4px;" onclick="reprintBill('${r.id}')">${t.printBill}</button>`;
+        } else {
+          billCell = `<span class="subtext">-</span>`;
+        }
         tr.innerHTML = `
           <td><span class="badge ${r.type === 'Teacher' ? 'teacher' : 'guest'}">${r.type === 'Teacher' ? t.teacher : t.guest}</span></td>
           <td>${escapeHtml(r.name || '')}<br><small class="subtext">${escapeHtml(r.remarks || '')}</small></td>
@@ -1872,6 +2243,7 @@
           <td>${escapeHtml(r.inTime || '-')}</td>
           <td>${escapeHtml(r.outTime || '-')}</td>
           <td><span class="badge ${r.status === 'IN' ? 'in' : 'out'}">${r.status}</span></td>
+          <td>${billCell}</td>
           <td>
             <div class="row">
               <button class="btn small secondary" onclick="startEdit('${r.id}')">${t.edit}</button>
@@ -1934,13 +2306,15 @@
       const r = records.find(x => x.id === id);
       if (!r) return;
       if (r.status === 'IN') {
-        r.status = 'OUT';
-        r.outTime = nowTime();
-      } else {
-        r.status = 'IN';
-        r.inTime = r.inTime || nowTime();
-        r.outTime = '';
+        // Open the checkout modal so user can edit out time + add charges + bill
+        openCheckoutFor(id);
+        return;
       }
+      // OUT -> IN: simple flip
+      r.status = 'IN';
+      r.inTime = r.inTime || nowTime();
+      r.outTime = '';
+      r.outDate = '';
       r.updatedAt = new Date().toISOString();
       saveRecords();
     };
@@ -2008,8 +2382,16 @@
         Host: r.host,
         Date: r.date,
         InTime: r.inTime,
+        OutDate: r.outDate || '',
         OutTime: r.outTime,
         Status: r.status,
+        Beds: r.bedCount || '',
+        Days: r.stayDays || '',
+        BedRate: r.bedRate || '',
+        BedCharge: r.bedCharge || '',
+        ExtraTotal: r.extraTotal || '',
+        TotalAmount: r.totalAmount || '',
+        BillNumber: r.billNumber || '',
         Remarks: r.remarks
       }));
       const ws = XLSX.utils.json_to_sheet(data.length ? data : [{ Note: 'No records in selected range' }]);
@@ -2038,12 +2420,13 @@
         r.date || '-',
         r.inTime || '-',
         r.outTime || '-',
-        r.status || '-'
+        r.status || '-',
+        r.totalAmount ? inr(r.totalAmount) : '-'
       ]);
       doc.autoTable({
         startY: 26,
-        head: [['Sl', 'Type', 'Name', 'School', 'Place', 'Room', 'Phone', 'Date', 'In Time', 'Out Time', 'Status']],
-        body: body.length ? body : [['', '', 'No records in selected range', '', '', '', '', '', '', '', '']],
+        head: [['Sl', 'Type', 'Name', 'School', 'Place', 'Room', 'Phone', 'Date', 'In Time', 'Out Time', 'Status', 'Total']],
+        body: body.length ? body : [['', '', 'No records in selected range', '', '', '', '', '', '', '', '', '']],
         styles: { fontSize: 8, cellPadding: 2.4 },
         headStyles: { fillColor: [37,99,235] }
       });
@@ -2128,6 +2511,15 @@
               remarks: String(low.remarks || '').trim(),
               inTime: String(low.intime || (status === 'IN' ? nowTime() : '')).trim(),
               outTime: String(low.outtime || (status === 'OUT' ? nowTime() : '')).trim(),
+              outDate: '',
+              bedCount: 1,
+              bedRate: DEFAULT_BED_RATE,
+              stayDays: 1,
+              extraCharges: [],
+              bedCharge: 0,
+              extraTotal: 0,
+              totalAmount: 0,
+              billNumber: '',
               createdAt: new Date().toISOString(),
               updatedAt: new Date().toISOString()
             };
@@ -2150,6 +2542,282 @@
       renderTable();
       applyLanguage();
     }
+
+    /* =========================================================
+       CHECKOUT / BILL MODAL
+       ========================================================= */
+    function openMatchPicker(matches) {
+      const t = getLang();
+      matchList.innerHTML = '';
+      matches.forEach(m => {
+        const div = document.createElement('div');
+        div.className = 'match-row';
+        div.innerHTML = `
+          <div class="info">
+            <b>${escapeHtml(m.name)} <span class="badge ${m.type==='Teacher'?'teacher':'guest'}">${m.type==='Teacher'?t.teacher:t.guest}</span></b>
+            <span><b>${t.room}:</b> ${escapeHtml(m.roomNumber||'-')} &nbsp;|&nbsp; <b>${t.date}:</b> ${formatDateHuman(m.date)} &nbsp;|&nbsp; <b>${t.inTime}:</b> ${escapeHtml(m.inTime||'-')} &nbsp;|&nbsp; <b>${t.phone}:</b> ${escapeHtml(m.phone||'-')}</span>
+          </div>
+          <button class="btn primary small">${t.selectBtn}</button>
+        `;
+        div.addEventListener('click', () => openCheckoutFor(m.id));
+        matchList.appendChild(div);
+      });
+      modalStepPick.classList.remove('hidden');
+      modalStepCheckout.classList.add('hidden');
+      document.getElementById('modalTitle').textContent = t.pickGuestTitle;
+      checkoutOverlay.classList.remove('hidden');
+    }
+
+    window.openCheckoutFor = function(recordId) {
+      const t = getLang();
+      const r = records.find(x => x.id === recordId);
+      if (!r) return;
+      checkoutState.recordId = recordId;
+      modalStepPick.classList.add('hidden');
+      modalStepCheckout.classList.remove('hidden');
+      document.getElementById('modalTitle').textContent = t.checkoutTitle;
+
+      checkoutInfo.innerHTML = `
+        <b>${escapeHtml(r.name)}</b>
+        <span class="badge ${r.type==='Teacher'?'teacher':'guest'}" style="margin-left:6px;">${r.type==='Teacher'?t.teacher:t.guest}</span>
+        <br>
+        <b>${t.room}:</b> ${escapeHtml(r.roomNumber||'-')} &nbsp;|&nbsp;
+        <b>${t.phone}:</b> ${escapeHtml(r.phone||'-')} &nbsp;|&nbsp;
+        <b>${t.date} (IN):</b> ${formatDateHuman(r.date)} ${escapeHtml(r.inTime||'')}
+        ${r.school ? `<br><b>${t.school}:</b> ${escapeHtml(r.school)}` : ''}
+        ${r.place ? `<br><b>${t.place}:</b> ${escapeHtml(r.place)}` : ''}
+      `;
+
+      // Defaults: prefer existing values if record was already partially billed
+      modalOutDate.value = r.outDate || todayISO();
+      modalOutTime.value = r.outTime || nowTime();
+      modalBeds.value = r.bedCount || 1;
+      modalRate.value = (r.bedRate ?? DEFAULT_BED_RATE);
+      const computedDays = computeStayDays(r.date, modalOutDate.value);
+      modalDays.value = r.stayDays && r.status === 'OUT' ? r.stayDays : computedDays;
+
+      // Restore extra charges (if any)
+      extraChargesWrap.innerHTML = '';
+      if (Array.isArray(r.extraCharges) && r.extraCharges.length) {
+        r.extraCharges.forEach(c => addExtraRow(c.desc, c.amount));
+      }
+
+      recalculateTotal();
+      checkoutOverlay.classList.remove('hidden');
+    };
+
+    function computeStayDays(inDate, outDate) {
+      if (!inDate || !outDate) return 1;
+      const a = new Date(inDate + 'T00:00:00');
+      const b = new Date(outDate + 'T00:00:00');
+      let diff = Math.round((b - a) / 86400000);
+      if (diff < 1) diff = 1;
+      return diff;
+    }
+
+    function addExtraRow(desc='', amt=0) {
+      const t = getLang();
+      const row = document.createElement('div');
+      row.className = 'extra-row';
+      row.innerHTML = `
+        <input type="text" placeholder="${t.chargeDescPh}" class="extra-desc" value="${escapeHtml(desc)}" />
+        <input type="number" placeholder="${t.chargeAmtPh}" class="extra-amt" min="0" value="${amt && Number(amt) ? amt : ''}" />
+        <button type="button" class="remove-btn" title="Remove">×</button>
+      `;
+      row.querySelector('.remove-btn').addEventListener('click', () => { row.remove(); recalculateTotal(); });
+      row.querySelector('.extra-desc').addEventListener('input', recalculateTotal);
+      row.querySelector('.extra-amt').addEventListener('input', recalculateTotal);
+      extraChargesWrap.appendChild(row);
+      // Focus the amount field if description is preset
+      if (desc) row.querySelector('.extra-amt').focus();
+      recalculateTotal();
+    }
+
+    function readExtraCharges() {
+      return [...extraChargesWrap.querySelectorAll('.extra-row')].map(row => {
+        return {
+          desc: row.querySelector('.extra-desc').value.trim(),
+          amount: Number(row.querySelector('.extra-amt').value) || 0
+        };
+      }).filter(c => c.desc || c.amount);
+    }
+
+    function recalculateTotal() {
+      const beds = Math.max(1, Number(modalBeds.value) || 1);
+      const rate = Math.max(0, Number(modalRate.value) || 0);
+      const days = Math.max(1, Number(modalDays.value) || 1);
+      const bedTotal = beds * rate * days;
+      modalRoomCharge.value = bedTotal;
+      const extras = readExtraCharges();
+      const extraTotal = extras.reduce((a,b) => a + (b.amount || 0), 0);
+      billBed.textContent = inr(bedTotal);
+      billExtra.textContent = inr(extraTotal);
+      billTotal.textContent = inr(bedTotal + extraTotal);
+    }
+
+    function confirmCheckout(generateBill = true) {
+      const t = getLang();
+      const r = records.find(x => x.id === checkoutState.recordId);
+      if (!r) return;
+      const beds = Math.max(1, Number(modalBeds.value) || 1);
+      const rate = Math.max(0, Number(modalRate.value) || 0);
+      const days = Math.max(1, Number(modalDays.value) || 1);
+      const extras = readExtraCharges();
+      const bedTotal = beds * rate * days;
+      const extraTotal = extras.reduce((a,b) => a + (b.amount || 0), 0);
+      const grandTotal = bedTotal + extraTotal;
+
+      r.status = 'OUT';
+      r.outTime = (modalOutTime.value || nowTime()).trim();
+      r.outDate = modalOutDate.value || todayISO();
+      r.bedCount = beds;
+      r.bedRate = rate;
+      r.stayDays = days;
+      r.extraCharges = extras;
+      r.bedCharge = bedTotal;
+      r.extraTotal = extraTotal;
+      r.totalAmount = grandTotal;
+      r.billNumber = r.billNumber || ('B' + Date.now().toString().slice(-7));
+      r.updatedAt = new Date().toISOString();
+
+      saveRecords();
+      if (generateBill) generateBillPDF(r);
+      closeCheckoutModal();
+      showToast(generateBill ? t.checkoutDone : t.markOutDone);
+    }
+
+    function closeCheckoutModal() {
+      checkoutOverlay.classList.add('hidden');
+      checkoutState.recordId = null;
+    }
+
+    window.reprintBill = function(id) {
+      const r = records.find(x => x.id === id);
+      if (!r) return;
+      generateBillPDF(r);
+    };
+
+    function generateBillPDF(r) {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+
+      // Header band
+      doc.setFillColor(37, 99, 235);
+      doc.rect(0, 0, 210, 30, 'F');
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(18);
+      doc.setFont(undefined, 'bold');
+      doc.text('MAKAUT GUEST HOUSE', 105, 14, { align: 'center' });
+      doc.setFontSize(10);
+      doc.setFont(undefined, 'normal');
+      doc.text('Official Stay Bill / Receipt', 105, 22, { align: 'center' });
+
+      // Bill meta
+      doc.setTextColor(20, 20, 20);
+      doc.setFontSize(11);
+      doc.text(`Bill No: ${r.billNumber || '-'}`, 14, 40);
+      doc.text(`Bill Date: ${todayISO()}`, 150, 40);
+
+      // Guest info box
+      doc.setDrawColor(180);
+      doc.roundedRect(14, 46, 182, 38, 2, 2);
+      doc.setFontSize(10);
+      doc.text(`Name: ${r.name || '-'}`, 18, 54);
+      doc.text(`Type: ${r.type}`, 130, 54);
+      doc.text(`Phone: ${r.phone || '-'}`, 18, 61);
+      doc.text(`Place: ${r.place || '-'}`, 130, 61);
+      if (r.type === 'Teacher') {
+        doc.text(`School: ${r.school || '-'}`, 18, 68);
+        doc.text(`Host: ${r.host || '-'}`, 130, 68);
+      } else {
+        doc.text(`Allotted By: ${r.allottedBy || '-'}`, 18, 68);
+        doc.text(`Room No: ${r.roomNumber || '-'}`, 130, 68);
+      }
+      if (r.type === 'Teacher') {
+        doc.text(`Room No: ${r.roomNumber || '-'}`, 18, 75);
+        doc.text(`Purpose: ${r.purpose || '-'}`, 130, 75);
+      } else {
+        doc.text(`Purpose: ${r.purpose || '-'}`, 18, 75);
+      }
+
+      // Stay info
+      doc.setFont(undefined, 'bold');
+      doc.text('Stay Details', 14, 94);
+      doc.setFont(undefined, 'normal');
+      doc.text(`Check-In: ${r.date} ${r.inTime || ''}`, 18, 102);
+      doc.text(`Check-Out: ${r.outDate || todayISO()} ${r.outTime || ''}`, 18, 109);
+      doc.text(`No. of Days: ${r.stayDays || 1}`, 18, 116);
+      doc.text(`No. of Beds: ${r.bedCount || 1}`, 80, 116);
+      doc.text(`Rate / Bed / Day: Rs. ${r.bedRate ?? DEFAULT_BED_RATE}`, 130, 116);
+
+      // Charges table
+      const body = [
+        ['1', `Bed Charge (${r.bedCount || 1} bed${(r.bedCount||1)>1?'s':''} x Rs. ${r.bedRate ?? DEFAULT_BED_RATE} x ${r.stayDays||1} day${(r.stayDays||1)>1?'s':''})`, `Rs. ${(r.bedCharge||0).toLocaleString('en-IN')}`]
+      ];
+      (r.extraCharges || []).forEach((c, i) => {
+        body.push([String(i + 2), c.desc || 'Extra', `Rs. ${(c.amount || 0).toLocaleString('en-IN')}`]);
+      });
+
+      doc.autoTable({
+        startY: 124,
+        head: [['#', 'Description', 'Amount']],
+        body,
+        styles: { fontSize: 10, cellPadding: 3 },
+        headStyles: { fillColor: [37,99,235], textColor: 255 },
+        columnStyles: { 0: { cellWidth: 14 }, 2: { halign: 'right', cellWidth: 40 } }
+      });
+
+      let y = doc.lastAutoTable.finalY + 6;
+      doc.setDrawColor(37, 99, 235);
+      doc.setLineWidth(0.5);
+      doc.line(120, y, 196, y);
+      y += 7;
+      doc.setFont(undefined, 'bold');
+      doc.setFontSize(13);
+      doc.text('Grand Total:', 130, y);
+      doc.text(`Rs. ${(r.totalAmount || 0).toLocaleString('en-IN')}`, 196, y, { align: 'right' });
+      y += 12;
+
+      // Remarks
+      if (r.remarks) {
+        doc.setFont(undefined, 'normal');
+        doc.setFontSize(9);
+        doc.text(`Remarks: ${r.remarks}`, 14, y);
+        y += 6;
+      }
+
+      // Footer
+      doc.setFontSize(9);
+      doc.setTextColor(100);
+      doc.text('Thank you for staying at MAKAUT Guest House.', 105, 280, { align: 'center' });
+      doc.text('Authorized Signature: ____________________', 14, 270);
+
+      const safeName = (r.name || 'guest').replace(/\s+/g,'_');
+      doc.save(`bill_${r.billNumber || 'NA'}_${safeName}.pdf`);
+    }
+
+    function quickMarkOut() {
+      const t = getLang();
+      const queryEl = document.getElementById('quickOutSearch');
+      const query = queryEl.value.trim().toLowerCase();
+      if (!query) { alert(t.enterQuery); return; }
+
+      const matches = records.filter(r =>
+        r.status === 'IN' && (
+          (r.name && r.name.toLowerCase().includes(query)) ||
+          (r.roomNumber && r.roomNumber.toLowerCase().includes(query))
+        )
+      );
+
+      if (!matches.length) { alert(t.noMatch); return; }
+
+      if (matches.length === 1) {
+        openCheckoutFor(matches[0].id);
+      } else {
+        openMatchPicker(matches);
+      }
+    }
+    window.quickMarkOut = quickMarkOut;
 
     // DOM refs
     const guestName = document.getElementById('guestName');
@@ -2211,6 +2879,27 @@
     const restoreFileInput = document.getElementById('restoreFileInput');
     const quickInsideBtn = document.getElementById('quickInsideBtn');
 
+    /* Modal refs */
+    const checkoutOverlay = document.getElementById('checkoutOverlay');
+    const modalStepPick = document.getElementById('modalStepPick');
+    const modalStepCheckout = document.getElementById('modalStepCheckout');
+    const matchList = document.getElementById('matchList');
+    const checkoutInfo = document.getElementById('checkoutInfo');
+    const modalOutDate = document.getElementById('modalOutDate');
+    const modalOutTime = document.getElementById('modalOutTime');
+    const modalBeds = document.getElementById('modalBeds');
+    const modalRate = document.getElementById('modalRate');
+    const modalDays = document.getElementById('modalDays');
+    const modalRoomCharge = document.getElementById('modalRoomCharge');
+    const extraChargesWrap = document.getElementById('extraChargesWrap');
+    const billBed = document.getElementById('billBed');
+    const billExtra = document.getElementById('billExtra');
+    const billTotal = document.getElementById('billTotal');
+    const confirmCheckoutBtn = document.getElementById('confirmCheckoutBtn');
+    const markOutOnlyBtn = document.getElementById('markOutOnlyBtn');
+    const modalCloseBtn = document.getElementById('modalCloseBtn');
+    const modalBackBtn = document.getElementById('modalBackBtn');
+
     // event binding
     saveGuestBtn.addEventListener('click', saveGuest);
     clearGuestBtn.addEventListener('click', () => clearGuestForm());
@@ -2257,28 +2946,50 @@
       customToWrap.classList.toggle('hidden', !custom);
     });
 
-    function quickMarkOut() {
-      const query = document.getElementById('quickOutSearch').value.toLowerCase();
-      if (!query) return alert('Enter name or room');
+    /* Modal events */
+    modalCloseBtn.addEventListener('click', closeCheckoutModal);
+    checkoutOverlay.addEventListener('click', e => { if (e.target === checkoutOverlay) closeCheckoutModal(); });
+    modalBackBtn.addEventListener('click', () => {
+      // If we came from a multi-pick, go back to picker; otherwise just close
+      if (matchList.children.length > 0) {
+        modalStepPick.classList.remove('hidden');
+        modalStepCheckout.classList.add('hidden');
+        document.getElementById('modalTitle').textContent = getLang().pickGuestTitle;
+      } else {
+        closeCheckoutModal();
+      }
+    });
+    confirmCheckoutBtn.addEventListener('click', () => confirmCheckout(true));
+    markOutOnlyBtn.addEventListener('click', () => confirmCheckout(false));
 
-      const found = records.find(r =>
-        r.status === 'IN' && (
-          (r.name && r.name.toLowerCase().includes(query)) ||
-          (r.roomNumber && r.roomNumber.toLowerCase().includes(query))
-        )
-      );
+    [modalBeds, modalRate, modalDays].forEach(el => el.addEventListener('input', recalculateTotal));
+    modalOutDate.addEventListener('change', () => {
+      // Auto-update days when out date changes (using current record's in date)
+      const r = records.find(x => x.id === checkoutState.recordId);
+      if (r) {
+        const days = computeStayDays(r.date, modalOutDate.value);
+        modalDays.value = days;
+      }
+      recalculateTotal();
+    });
 
-      if (!found) return alert('No matching IN record found');
+    /* Preset chips: add Food/Water/Laundry/etc with amount=0 (user fills the amount) */
+    document.querySelectorAll('.preset-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        addExtraRow(chip.dataset.desc || 'Extra', 0);
+      });
+    });
 
-      found.status = 'OUT';
-      found.outTime = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit', second:'2-digit'});
-      found.updatedAt = new Date().toISOString();
-
-      saveRecords();
-      alert('Marked OUT for: ' + found.name);
-      document.getElementById('quickOutSearch').value = '';
-    }
-    window.quickMarkOut = quickMarkOut;
+    // Allow "Enter" in quick out search to trigger the action
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && document.activeElement && document.activeElement.id === 'quickOutSearch') {
+        e.preventDefault();
+        quickMarkOut();
+      }
+      if (e.key === 'Escape' && !checkoutOverlay.classList.contains('hidden')) {
+        closeCheckoutModal();
+      }
+    });
 
     // init
     setDefaults();
